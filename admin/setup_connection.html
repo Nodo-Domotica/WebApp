@@ -1,0 +1,137 @@
+
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Communication</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+<body> 
+<div data-role="page" id="setup_connection_page">
+
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<h1 id="header_setup_communication"></h1>
+		
+	</div><!-- /header -->
+ 
+	<div data-role="content">	
+
+	<form id="form_connection" data-ajax="false" > 
+	
+	 
+		<input type="hidden" name="send_method" id="send_method" value="2" />
+
+			
+	<br \>
+	
+		<label for="ipmessage" id="ipmessage">Nodo IP-address/hostname: (x.x.x.x)</label>
+		<input type="text" name="nodo_ip" id="nodo_ip" value=""  />
+	
+	<br \>   
+      
+		<label for="name">TCP port: (HTTP)</label>
+		    <select name="nodo_port" id="nodo_port" data-placeholder="true" data-native-menu="false">
+			
+				<option value="6636" selected="selected">6636</option>
+				<option value="6637" >6637</option>
+				<option value="6638" >6638</option>
+				<option value="6639" >6639</option>
+				<option value="6640" >6640</option>
+				<option value="6641" >6641</option>
+				<option value="6642" >6642</option>
+				<option value="6643" >6643</option>
+				<option value="6644" >6644</option>
+				<option value="8080" >8080</option>
+				<option value="8081" >8081</option>
+				<option value="8082" >8082</option>
+				<option value="8083" >8083</option>
+				<option value="8084" >8084</option>
+				<option value="8085" >8085</option>
+				<option value="80" >80</option>	
+		    </select> 
+
+			
+	<br \>
+      
+		<label for="name">Nodo password:</label>
+		<input type="password" name="nodo_password" id="nodo_password" value=""  />
+		In case of auto configuration your Nodo password will be changed to this password!<br \>
+		
+	<br \>
+	   	   	
+		 <input type="checkbox" name="auto_config" id="auto_config_2" class="custom" />
+		<label for="auto_config_2">Auto configure your default Nodo</label>
+	 
+	 <br \>  
+      
+		<label for="name" id="nodo_id_txt">Nodo ID: <b></b></label>
+		<input type="hidden" name="nodo_id" id="nodo_id" value=""  />
+    
+	<br \><br \>
+        
+
+ 
+		
+		
+		<input type="submit" id="save" name="save" value="Save & check connection">
+		
+			
+	</form> 
+	
+	<div align="center" id="check_connection_div" style="display: none">
+	<h4><img src="../media/loading.gif"/> Please wait, checking connection....</h4>
+	</div>
+
+	
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="connection_popup" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h4 id="result_msg" class="ui-title"></h4>
+				<p id="result_sub_msg"></p>
+				<a href="#" data-role="button" data-inline="true" data-rel="back" >Ok</a>    
+				 
+			</div>
+		</div>
+	
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+</div><!-- /main page -->
+
+
+<script src="../js/check_session.js"></script>
+<script src="../js/user_settings.js"></script>
+<script src="../js/json_nodo_state.js"></script>
+<script src="js/setup_connection.js"></script>
+ 
+</body>
+</html>

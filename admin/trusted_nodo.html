@@ -1,0 +1,205 @@
+<!DOCTYPE html> 
+<html> 
+ 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Nodo's you trust</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+ 
+<body>
+
+<div data-role="popup" id="help_popup" data-theme="a">
+<p id="help_popup_content"></p>
+</div>
+
+<div data-role="popup" id="popupLogin" data-overlay-theme="a" data-dismissible="false" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+			<input type="checkbox" name="savecreds" id="checkbox-1" value="1" data-mini="true" />
+			<label for="checkbox-1">Keep me logged in</label>
+            <a href="#" id="btnSignin" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</a>
+        </div>
+    </form>
+</div> 
+
+<!-- Start of trusted_nodo page: -->
+<div data-role="page" id="trusted_nodo_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_trusted_nodo"></h1>
+		<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<a href="#" id="btnAddTrustedNodo" data-role="button" data-transition="none" data-icon="plus">Add</a>
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+		<div id="trusted_nodolist"></div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="trusted_nodo_popup_delete" data-transition="pop" data-overlay-theme="a" style="min-width:200px;" class="ui-corner-all">
+			
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message_trusted_nodo" class="ui-title"></h3>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="cancel_delete" data-role="button" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><div id="delete_button_trusted_nodo"</div></div>
+				</div>
+			</div>
+		</div>
+	
+	
+	</div>
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+	</div>
+</div>
+<!-- /trusted_nodo page -->
+
+<!-- Start of trusted_cmd page: -->
+<div data-role="page" id="trusted_cmd_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_trusted_cmd"></h1>
+		<a href="#trusted_nodo_page" class="headerButton"  data-role="button" data-icon="back">Back</a>
+		<a href="#" id="btnAddTrustedCmd" data-role="button" data-transition="none" data-icon="plus">Add</a>
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+		<div id="trusted_cmdlist"></div>
+	</div><!-- /content -->
+	
+	
+	<input type="hidden" name="trusted_cmd_page_refreshed" id="trusted_cmd_page_refreshed" value=""  />
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="trusted_cmd_popup_delete" data-transition="pop" data-overlay-theme="a" style="min-width:200px;" class="ui-corner-all">
+			
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message_trusted_cmd" class="ui-title"></h3>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="cancel_delete" data-role="button" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><div id="delete_button_trusted_cmd"</div></div>
+				</div>
+			</div>
+		</div>
+	
+	
+	</div>
+</div>
+<!-- /trusted_cmd page -->
+
+<!-- Start of trusted_nodo form page: -->
+<div data-role="page" id="trusted_nodo_form_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_trusted_nodo_form"></h1>
+				
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+	
+		<form id="trusted_nodo" data-ajax="false"> 
+		
+			<input type="hidden" name="trusted_nodo_form_refreshed" id="trusted_nodo_form_refreshed" value=""  />
+			<input type="hidden" name="trusted_nodo_id" id="trusted_nodo_id" value=""  />
+			<label for="name">Description: </label>
+			<input type="text" name="trusted_nodo_description" id="trusted_nodo_description" value=""  />
+			<label for="name">Trusted Nodo ID:</label>
+			<input type="text" name="trusted_nodo_nodo_id" id="trusted_nodo_nodo_id" maxlength="8" value=""  />
+			<br \>
+			<button id="btnSaveTrustedNodo">Save</button>
+			<a href="#" id="btnCancel" data-role="button" data-rel="back" >Cancel</a>
+							
+		</form> 
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	
+</div><!-- /trusted_cmd form page -->
+
+<!-- Start of trusted_cmd form page: -->
+<div data-role="page" id="trusted_cmd_form_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_trusted_cmd_form"></h1>
+		
+		
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+	
+		<form id="trusted_cmd" data-ajax="false"> 
+		
+			<input type="hidden" name="trusted_cmd_form_refreshed" id="trusted_cmd_form_refreshed" value=""  />
+			<input type="hidden" name="trusted_cmd_id" id="trusted_cmd_id" value=""  />
+			<input type="hidden" name="trusted_cmd_trusted_id" id="trusted_cmd_trusted_id" value=""  />
+			<label for="name">Description: </label>
+			<input type="text" name="trusted_cmd_description" id="trusted_cmd_description" value=""  />
+			<label for="name">Allowed event from trusted Nodo:</label>
+			<input type="text" name="trusted_cmd_trusted_event" id="trusted_cmd_trusted_event" maxlength="" value=""  />
+			<label for="name">Command / Event to your Nodo:</label>
+			<input type="text" name="trusted_cmd_cmd" id="trusted_cmd_cmd" maxlength="" value=""  />
+			<br \>
+			<button id="btnSaveTrustedCmd">Save</button>
+			<a href="#" id="btnCancel" data-role="button" data-rel="back" >Cancel</a>
+							
+		</form> 
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	
+</div><!-- /trusted_cmd form page -->
+
+<script src="../js/json_nodo_state.js"></script>
+<script src="../js/crypto/core.js"></script>
+<script src="../js/crypto/enc-base64-min.js"></script>
+<script src="../js/user_settings2.js"></script>
+<script src="js/setup_trusted_nodo.js"></script>
+<script src="js/help_text.js"></script>
+
+</body>
+</html>

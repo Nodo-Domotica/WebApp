@@ -1,0 +1,170 @@
+<!DOCTYPE html> 
+<html> 
+ 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Scripts</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+ 
+<body> 
+
+<div data-role="popup" id="help_popup" data-theme="a">
+<p id="help_popup_content"></p>
+</div>
+
+<div data-role="popup" id="popupLogin" data-overlay-theme="a" data-dismissible="false" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+			<input type="checkbox" name="savecreds" id="checkbox-1" value="1" data-mini="true" />
+			<label for="checkbox-1">Keep me logged in</label>
+            <a href="#" id="btnSignin" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</a>
+        </div>
+    </form>
+</div> 
+
+<!-- Start of main page: -->
+
+<div data-role="page" id="scripts_page">
+
+<div data-role="panel" data-display="overlay" id="script_panel">
+  	<div id="script_panel_content"></div>
+</div><!-- /panel -->
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<h1 id="header_setup_scripts"></h1>
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+
+	
+	
+	<form id="scripts"> 
+	
+	 
+				
+	<br \>
+	
+		<label for="select-script" class="select">Select script:</label>
+		<select name="scriptfile" id="scriptfile" data-native-menu="true"></select>
+		
+		<div class="ui-grid-a">
+			<div class="ui-block-a"><input type="button" id="delete" name="delete" value="Delete" ></div>
+			<div class="ui-block-b"><input type="button" id="new" name="new" value="New"></div>
+		</div>
+		<input type="button" id="eventlist" name="eventlist" value="Read eventlist" >
+		
+			
+		
+		
+		<label for="scriptcontent1">Script:</label>
+		<textarea style="font-family:monospace;font-size:100%" data-mini="true" name="scriptcontent" id="scriptcontent"></textarea>
+<br \>		
+		
+    	
+		<input type="checkbox" name="checkbox" id="checkbox" class="custom" checked="yes"/>
+		<label for="checkbox">Execute after write</label>
+		
+		<br \>
+        
+		<input type="button" id="write" name="write" value="Write" > 
+			
+
+	
+	</form> 
+	
+	
+	
+		
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="scripts_popup_msg" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="write_message" class="ui-title"></h3>
+				<a href="#" data-role="button" data-inline="true" data-rel="back" >Ok</a>    
+			</div>
+	</div>
+		
+		<div data-role="popup" id="scripts_popup_new" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="new_message" class="ui-title"></h3>
+				<div id="scriptfilenewdiv">
+					<label for="scriptfilenew" id="scriptfilenewlabel">Script name:</label>
+					<input type="text" maxlength="8" style="text-transform: uppercase" name="scriptfilenew" id="scriptfilenew" value="" />
+				</div>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="new2" data-role="button" data-inline="true" data-rel="back" >Close</a> </div>
+					<div class="ui-block-b"><input type="button" id="new3" name="new3" value="Create"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div data-role="popup" id="scripts_popup_delete" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+				
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message" class="ui-title"></h3>
+					<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" data-role="button" id="delete2" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><input type="button" id="delete3" name="delete3" value="Ok"></div>
+				</div>
+			</div>
+		</div>
+		
+		<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+	</div>
+	
+</div><!-- /main page -->
+
+
+<script src="../js/crypto/core.js"></script>
+<script src="../js/crypto/enc-base64-min.js"></script>
+<script src="../js/user_settings2.js"></script>
+
+<script src="../js/json_nodo_state.js"></script>
+<script src="js/setup_scripts.js"></script>
+<script src="js/help_text.js"></script>
+
+
+ 
+</body>
+</html>

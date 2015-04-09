@@ -1,0 +1,154 @@
+<!DOCTYPE html> 
+<html> 
+ 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Notifications</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+ 
+<body>
+
+<div data-role="popup" id="help_popup" data-theme="a">
+<p id="help_popup_content"></p>
+</div>
+
+<div data-role="popup" id="popupLogin" data-overlay-theme="a" data-dismissible="false" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+			<input type="checkbox" name="savecreds" id="checkbox-1" value="1" data-mini="true" />
+			<label for="checkbox-1">Keep me logged in</label>
+            <a href="#" id="btnSignin" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</a>
+        </div>
+    </form>
+</div>
+
+<div data-role="popup" id="help_popup" data-theme="a">
+<p id="help_popup_content"></p>
+</div>
+
+<!-- Start of notifications page: -->
+<div data-role="page" id="notifications_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_notifications"></h1>
+			<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<a href="#" id="btnAdd" data-role="button" data-transition="none" data-icon="plus">Add</a>
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+		<div id="notificationlist"></div>
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="notification_popup_delete" data-transition="pop" data-overlay-theme="a" style="min-width:200px;" class="ui-corner-all">
+			
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message" class="ui-title"></h3>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="cancel_delete" data-role="button" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><div id="delete_button"</div></div>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+	</div>
+</div>
+<!-- /notifications page -->
+
+<!-- Start of notification form page: -->
+<div data-role="page" id="notification_form_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_notification_form"></h1>
+		
+		
+	</div><!-- /header -->
+  
+	<div data-role="content">	
+	
+		<form id="notification" data-ajax="false"> 
+		
+			<input type="hidden" name="id" id="id" value=""  />
+			<label for="description">Description: </label>
+			<input type="text" name="description" id="description" value=""  />
+			<label for="type" class="select">Select type:</label>
+			<select name="select-choice-mini1" id="type" data-inline="true">
+				<option value="1">E-mail</option>
+				<option value="2">Pushingbox</option>
+				<option value="3">Other Nodo</option>
+			</select>
+			<label for="unit">Nodo unit: <a href="javascript:help_text(1,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="unit" id="unit" value=""  />
+			<label for="event" id="event_label">Event:  <a href="javascript:help_text(3,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="event" id="event" value=""  />
+			<label for="nodo_id" id="nodo_id_label" class="select">Remote Nodo ID:  <a href="javascript:help_text(2,'help_popup')"><img src="../media/help.png"></a></label>
+			<select name="nodo_id" id="nodo_id" data-inline="true">
+			
+			</select>
+			<label for="recipient" id="recipient_label">Recipient:</label>
+			<input type="text" name="recipient" id="recipient" value=""  />
+			<div id="subject_body">
+			<label for="name">Subject:</label>
+			<input type="text" name="subject" id="subject" value=""  />
+			<label for="body">Body:</label>
+			<textarea name="body" id="body"></textarea>
+			</div>
+			<br \>
+			<button id="btnSave">Save</button>
+			<a href="#" id="btnCancel" data-role="button" data-rel="back" >Cancel</a>
+							
+		</form> 
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+	</div><!-- /footer -->
+	
+
+	
+	
+</div><!-- /notification form page -->
+
+
+<script src="../js/json_nodo_state.js"></script>
+<script src="../js/crypto/core.js"></script>
+<script src="../js/crypto/enc-base64-min.js"></script>
+<script src="../js/user_settings2.js"></script>
+<script src="js/setup_notifications.js"></script>
+<script src="js/help_text.js"></script>
+
+</body>
+</html>

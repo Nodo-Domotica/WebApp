@@ -1,0 +1,70 @@
+<!DOCTYPE html> 
+<html> 
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Setup</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+
+
+<body> 
+
+<div data-role="page" id="setup_page">
+
+
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		 <a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<h1 id="header_setup_index"></h1>
+		
+	</div>
+	<!-- /header -->
+
+	<div data-role="content">
+	<p></p>
+		<ul data-role="listview" id="listviewsetup">
+				<li><a href="setup_connection.html" data-ajax="false">Communication</a></li>
+				<li><a href="devices.html" data-ajax="false">My objects</a></li>
+				<li><a href="groups.html" data-ajax="false">Groups</a></li>
+				<li><a href="scripts.html" data-ajax="false">Scripts</a></li>
+				<li><a href="notifications.html" data-ajax="false">Notifications</a></li>
+				<li><a href="trusted_nodo.html" data-ajax="false">Trusted Nodo's</a></li>
+				<li><a href="personal.php" data-ajax="false">Personal</a></li>
+			</ul>
+	<p></p>
+	</div><!-- /content -->
+	
+		<div data-role="footer" data-id="toolbar"  data-position="fixed" data-tap-toggle="false" >
+			<h4></h4>
+		</div>
+	<!-- /footer -->	
+
+
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	</div>	
+	
+	
+</div><!-- /page -->
+<script src="../js/check_session.js"></script>
+<script src="../js/user_settings.js"></script>
+<script src="js/setup_index.js"></script>
+<script src="../js/json_nodo_state.js"></script>
+
+</body>
+</html>

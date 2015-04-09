@@ -1,0 +1,605 @@
+<!DOCTYPE html> 
+<html> 
+ 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Devices</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+ 
+<body> 
+
+<div data-role="popup" id="help_popup" data-theme="a">
+<p id="help_popup_content"></p>
+</div>
+
+<div data-role="popup" id="popupLogin" data-overlay-theme="a" data-dismissible="false" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+			<input type="checkbox" name="savecreds" id="checkbox-1" value="1" data-mini="true" />
+			<label for="checkbox-1">Keep me logged in</label>
+            <a href="#" id="btnSignin" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</a>
+        </div>
+    </form>
+</div>
+
+
+<!-- Start of device page: -->
+
+<div data-role="page" id="devices_page">
+	 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		
+		<h1 id="header_setup_devices"></h1>
+		<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		
+		<div class="ui-btn-right">
+			<a href="#device_add_page" class="headerButton"  data-role="button" data-icon="plus">Add</a>
+        </div>
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+			
+		<div id="devicelist"></div>
+	
+	</div><!-- /content -->
+	
+
+	
+	<div data-role="footer" data-id="toolbar"  data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+		
+	</div>
+	
+	<div data-role="popup" id="device_popup_delete" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message" class="ui-title"></h3>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="cancel_delete" data-role="button" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><a href="javascript:deleteDevice()" id="ok_delete" data-role="button" data-inline="true" >Delete</a> </div>
+				</div>
+			</div>
+	</div>
+	
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+	</div>
+	
+	
+</div><!-- /device page -->
+
+<!-- Start of devices extra page: -->
+
+<div data-role="page" id="device_cmd_page">
+
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device_cmd"></h1>
+		<div class="ui-btn-left">
+			<a href="#devices_page" class="headerButton"  data-role="button" data-icon="back">Back</a>
+		</div>
+		
+		<div class="ui-btn-right">
+			<a href="#"  id="device_cmd_btnAdd" class="headerButton"  data-role="button" data-icon="plus">Add</a>
+        </div>
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+			
+		<div id="devicecmdlist"></div>
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+	<div data-role="popup" id="device_popup_delete_extra" data-overlay-theme="a" style="min-width:250px;" class="ui-corner-all">
+			<div data-role="header" class="ui-corner-top">
+				<h1></h1>
+			</div>
+			<div data-role="content" class="ui-corner-bottom ui-content">
+				<h3 id="delete_message_extra" class="ui-title"></h3>
+				<div class="ui-grid-a">
+					<div class="ui-block-a"><a href="#" id="cancel_delete_extra" data-role="button" data-inline="true" data-rel="back" >Cancel</a> </div>
+					<div class="ui-block-b"><a href="javascript:deleteDeviceExtra()" id="ok_delete_extra" data-role="button" data-inline="true" >Delete</a> </div>
+				</div>
+			</div>
+		</div>
+	
+	
+</div><!-- /device extra page -->
+
+<!-- Start of device form page: -->
+
+<div data-role="page" id="device_form_page">
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device_form"></h1>
+		<div class="ui-btn-left">
+			<a href="#" class="headerButton"  data-role="button" data-rel="back" data-icon="back">Back</a>
+		</div>
+		
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+	
+		<form id="device" data-ajax="false"> 
+		
+			
+			<input type="hidden" name="object_id" id="object_id" value=""  />
+			<label for="device_description">Object description: <a href="javascript:help_text(10,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device_description" id="device_description" value=""  />
+			<div id="icon_div">
+			<label for="icon" class="select">Icon: <a href="javascript:help_text(11,'help_popup')"><img src="../media/help.png"></a>  <span id="icon1_div"></span></label>
+			<select name="select-choice-mini3" id="device_icon" data-inline="true">
+				<option value="0">None</option>
+				<option value="1">Grey LED</option>
+				<option value="2">Green LED</option>
+				<option value="3">Yellow LED</option>
+				<option value="4">Red LED</option>
+				<option value="5">Blue LED</option>
+				<option value="6">Lightning bolt</option>
+				<option value="7">Person grey</option>
+				<option value="8">Person green</option>
+				<option value="9">Warning</option>
+				<option value="10">Sun</option>
+				<option value="11">Rain</option>
+				<option value="12">Overcast</option>
+				<option value="13">Sunny period</option>
+				<option value="14">Thunder</option>
+				<option value="15">Bell</option>
+				<option value="16">Bulp off</option>
+				<option value="17">Bulp on</option>
+				<option value="18">Door closed</option>
+				<option value="19">Door open</option>
+				<option value="20">Thermometer</option>
+				<option value="21">Thermometer high</option>
+				<option value="22">Thermometer low</option>
+				<option value="23">Water droplet</option>
+				<option value="24">Clock disabled</option>
+				<option value="25">Clock</option>
+				<option value="26">Fan off</option>
+				<option value="27">Fan on</option>
+				<option value="28">TV off</option>
+				<option value="29">TV on</option>
+				<option value="32">Fire alert off</option>
+				<option value="33">Fire alert on</option>
+				<option value="34">Moon</option>
+				<option value="35">Info</option>
+			</select>
+			</div>
+			<label for="device_type" class="select">Select type: <a href="javascript:help_text(12,'help_popup')"><img src="../media/help.png"></a></label>
+			<select name="device_type" id="device_type" data-native-menu="true">
+				<option value="1">Device</option>
+				<option value="2">Remote Control</option>
+				<option value="3">Activity</option>
+				<option value="4">State</option>
+				<option value="5">Value</option>
+				<option value="6">Alarm</option>
+			</select>
+			<div id="device_group_div">
+				 <div id="group_select_div"></div>
+			</div>
+			 
+			<br />
+			<button id="device_btnSave">Save</button>
+			<a href="#" id="device_btnCancel" data-role="button" data-rel="back" >Cancel</a>
+						
+		</form> 
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	<div data-role="popup" id="help_device_add">
+<p id="help_device_add_content"></p>
+</div>
+	
+</div><!-- /device add page -->
+
+<!-- Start of device_cmd add page: -->
+
+<div data-role="page" id="device_cmd_form_page">
+
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device_cmd_form"></h1>
+		<div class="ui-btn-left">
+			<a href="#device_cmd_page" class="headerButton" data-role="button" data-icon="back">Back</a>
+		</div>
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+	
+		<form id="device_cmd_form" data-ajax="false"> 
+		
+			<input type="hidden" name="device_cmd_id" id="device_cmd_id" value=""  />
+			<input type="hidden" name="device_cmd_object_id" id="device_cmd_object_id" value=""  />
+			<input type="hidden" name="hidden_device_type" id="hidden_device_type" value=""  />
+			<label for="command_type" class="select">Select type: <a href="javascript:help_text(21,'help_popup')"><img src="../media/help.png"></a></label>
+					<select name="select-choice-mini1" id="device_cmd_type" data-inline="true">
+						<option value="1">Button</option>
+						<option value="2">Slider</option>
+						<option value="3">Color picker</option>
+						<option value="5">Indicator</option>
+						<option value="99">Empty space</option>
+					</select>
+			<label for="device_cmd_description" id="device_cmd_description_label">Description:</label>
+			<input type="text" name="device_cmd_description" id="device_cmd_description" value=""  />
+			
+				
+			
+			<div id="linked_graph_div">	
+				<label for="linked_graph" class="select">Select graph to link:</label>
+				<select name="select-choice-mini2" id="linked_graph" data-inline="true">
+				</select>
+			</div>
+			
+			<div id="indicator_placeholder_select_div">	
+				<label for="indicator_placeholder_select" class="select">Select indicator placeholder: <a href="javascript:help_text(54,'help_popup')"><img src="../media/help.png"></a></label>
+				<select name="indicator_placeholder_select" id="indicator_placeholder_select" data-inline="true">
+				</select>
+			</div>
+			
+			<div id="alarm_div">	
+				<label for="alarm" class="select">Select Alarm nr:</label>
+				<select name="select-choice-mini3" id="alarm" data-inline="true">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+				</select>
+			</div>
+					
+			<div id="webapp_par1_div">
+			    <label for="device_cmd_webapp_par1" id="label_device_cmd_webapp_par1">webapp_par1:</label>
+				<input type="text" name="device_cmd_webapp_par1" id="device_cmd_webapp_par1" value=""  />
+			</div>
+			<div id="webapp_par2_div">			
+				<label for="device_cmd_webapp_par2" id="label_device_cmd_webapp_par2">webapp_par2:</label>
+				<input type="text" name="device_cmd_webapp_par2" id="device_cmd_webapp_par2" value=""  />
+			</div>
+			
+			<div id="webapp_par3_div">				
+			<label for="device_cmd_webapp_par3" id="label_device_cmd_webapp_par3">webapp_par3:</label>
+				<input type="text" name="device_cmd_webapp_par3" id="device_cmd_webapp_par3" value=""  />
+			</div>
+			<div id="webapp_par4_div">				
+			<label for="device_cmd_webapp_par4" id="label_device_cmd_webapp_par4">webapp_par4:</label>
+				<input type="text" name="device_cmd_webapp_par4" id="device_cmd_webapp_par4" value=""  />
+			</div>
+			
+			
+			<div id="indicator_icon_div">
+			<label for="indicator" class="select">Indicator icon: <a href="javascript:help_text(40,'help_popup')"><img src="../media/help.png"></a> <span id="icon2_div"></span></label>
+			<select name="select-choice-mini3" id="device_cmd_indicator" data-inline="true">
+				<option value="0">None</option>
+				<option value="1">Grey LED</option>
+				<option value="2">Green LED</option>
+				<option value="3">Yellow LED</option>
+				<option value="4">Red LED</option>
+				<option value="5">Blue LED</option>
+				<option value="6">Lightning bolt</option>
+				<option value="7">Person grey</option>
+				<option value="8">Person green</option>
+				<option value="9">Warning</option>
+				<option value="10">Sun</option>
+				<option value="11">Rain</option>
+				<option value="12">Overcast</option>
+				<option value="13">Sunny period</option>
+				<option value="14">Thunder</option>
+				<option value="15">Bell</option>
+				<option value="16">Bulp off</option>
+				<option value="17">Bulp on</option>
+				<option value="18">Door closed</option>
+				<option value="19">Door open</option>
+				<option value="20">Thermometer</option>
+				<option value="21">Thermometer high</option>
+				<option value="22">Thermometer low</option>
+				<option value="23">Water droplet</option>
+				<option value="24">Clock disabled</option>
+				<option value="25">Clock</option>
+				<option value="26">Fan off</option>
+				<option value="27">Fan on</option>
+				<option value="28">TV off</option>
+				<option value="29">TV on</option>
+				<option value="32">Fire alert off</option>
+				<option value="33">Fire alert on</option>
+				<option value="34">Moon</option>
+				<option value="35">Info</option>
+			</select>
+			</div>
+			<div id="cmd_div">
+				<label for="device_cmd_cmd" id="device_cmd_cmd_label">Command:</label>
+				<input type="text" name="device_cmd_cmd" id="device_cmd_cmd" value=""  />
+			</div>	
+			<div id="event_div">
+				<label for="device_cmd_unit_event" id="device_cmd_unit_event_label">Event from Unit: </label>
+				<input type="text" name="device_cmd_unit_event" id="device_cmd_unit_event" value="*"  />
+				<label for="device_cmd_event" id="device_cmd_event_label">Event:</label>
+				<input type="text" name="device_cmd_event" id="device_cmd_event" value=""  />
+			</div>
+			<div id="state_template_div">
+				<label for="device_cmd_state_template" id="device_cmd_state_template_label">State value: <small>(Example: [PAR2])</small> </label>
+				<input type="text" name="device_cmd_state_template" id="device_cmd_state_template" value=""  />
+			</div>	
+			<div id="value_div">
+			    <label for="device_cmd_value">Value to save: <small>(Example: [PAR2])</small> </label>
+				<input type="text" name="device_cmd_value" id="device_cmd_value" value=""  />
+			</div>
+			<div id="formula_div">
+			    <label for="device_cmd_formula" id="device_cmd_formula_label">Formula: <sup>*optional </sup></label>
+				<input type="text" name="device_cmd_formula" id="device_cmd_formula" value=""  />
+			</div>
+				
+			<div id="round_div">
+				<label for="device_cmd_round">Round: <sup>*optional </sup> <a href="javascript:help_text(38,'help_popup')"><img src="../media/help.png"></a></label>
+				<input type="text" name="device_cmd_round" id="device_cmd_round" value="0"  />
+			</div>
+			<div id="indicator_div">
+				<label for="device_cmd_indicator_text" id="device_cmd_indicator_label">Indicator text: <sup>*optional </sup><a href="javascript:help_text(39,'help_popup')"><img src="../media/help.png"></a></label>
+				<input type="text" name="device_cmd_indicator_text" id="device_cmd_indicator_text" value=""  />
+			</div>			
+			<br />
+			<button id="device_cmd_btnSave">Save</button>
+			<a href="#" id="device_cmd_btnCancel" data-role="button" data-rel="back" >Cancel</a>
+						
+		</form> 
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+</div><!-- /device_cmd add page -->
+
+<!-- Start of devices add page: -->
+
+<div data-role="page" id="device_add_page">
+
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device_add"></h1>
+		<div class="ui-btn-left">
+			<a href="#" class="headerButton"  data-role="button" data-rel="back" data-icon="back">Back</a>
+		</div>
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+		<p></p>
+		<ul data-role="listview" id="listviewadd">
+				<li><a href="#device1_page">KAKU</a></li>
+				<li><a href="#device2_page">NewKAKU</a></li>
+				<li><a href="#device_form_page" id="device_btnAdd" >Custom</a></li>
+				
+				
+		</ul>
+		
+	
+			
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+	
+	
+	
+</div><!-- /device add page -->
+
+<!-- Start of device1 page: -->
+
+<div data-role="page" id="device1_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device1"></h1>
+		<div class="ui-btn-left">
+			<a href="#" class="headerButton"  data-role="button" data-rel="back" data-icon="back">Back</a>
+		</div>
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+			<form id="device1" data-ajax="false"> 
+		
+			
+			<label for="device1_description">Device description: <a href="javascript:help_text(14,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device1_description" id="device1_description" value=""  />
+			<label for="device1_kaku">Kaku address: <a href="javascript:help_text(15,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device1_kaku" id="device1_kaku" value=""  />
+			
+			<div id="device1_group_div">
+				<div id="device1_group"></div>
+			</div>
+			<br />
+			<button id="device1_btnSave">Save</button>
+			<a href="#" id="device1_btnCancel" data-role="button" data-rel="back" >Cancel</a>
+						
+		</form> 
+		
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+		
+	
+</div><!-- /device1 page -->
+
+<!-- Start of device2 page: -->
+
+<div data-role="page" id="device2_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device2"></h1>
+		<div class="ui-btn-left">
+			<a href="#" class="headerButton"  data-role="button" data-rel="back" data-icon="back">Back</a>
+		</div>
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+			<form id="device2" data-ajax="false"> 
+		
+			
+			<label for="device2_description">Description: <a href="javascript:help_text(16,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device2_description" id="device2_description" value=""  />
+			<label for="device2_kaku">NewKaku address: <a href="javascript:help_text(17,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device2_kaku" id="device2_kaku" value=""  />
+			<label for="device2_dim" class="select">Dim: <a href="javascript:help_text(18,'help_popup')"><img src="../media/help.png"></a></label>
+				<select name="select-choice-mini3" id="device2_dim" data-native-menu="true" >
+						<option value="0">No</option>
+						<option value="1">Yes</option>
+						
+				</select>
+			<div id="device2_group_div">
+				<div id="device2_group"></div>
+			</div>
+			<br />
+			<button id="device2_btnSave">Save</button>
+			<a href="#" id="device2_btnCancel" data-role="button" data-rel="back" >Cancel</a>
+						
+		</form> 
+		
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+		
+	
+</div><!-- /device3 page -->
+
+<div data-role="page" id="device3_page">
+	
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1 id="header_setup_device3"></h1>
+		<div class="ui-btn-left">
+			<a href="#" class="headerButton"  data-role="button" data-rel="back" data-icon="back">Back</a>
+		</div>
+		
+		
+	</div><!-- /header -->
+ 
+ 
+	<div data-role="content">	
+			<form id="device3" data-ajax="false"> 
+		
+			<label for="device3_sensor_type" class="select">Sensor type: <a href="javascript:help_text(55,'help_popup')"><img src="../media/help.png"></a></label>
+				<select name="select-choice-mini3" id="device3_sensor_type" data-native-menu="true" >
+						<option value="0">Air pressure (BMP085/BMP180)</option>
+						<option value="1">Temperature (DS18B20/DHT-11/DHT-22)</option>
+						
+				</select>
+			<label for="device3_description">Sensor description: <a href="javascript:help_text(56,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device3_description" id="device3_description" value=""  />
+			<label for="device3_unit">Event from Unit: <a href="javascript:help_text(57,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device3_unit" id="device3_unit" value=""  />
+			<label for="device3_variable">Variable nr.: <a href="javascript:help_text(58,'help_popup')"><img src="../media/help.png"></a></label>
+			<input type="text" name="device3_variable" id="device3_variable" value=""  />
+			
+			
+			<div id="device3_group_div">
+				<div id="device3_group"></div>
+			</div>
+			<br />
+			<button id="device3_btnSave">Save</button>
+			<a href="#" id="device3_btnCancel" data-role="button" data-rel="back" >Cancel</a>
+						
+		</form> 
+		
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+		
+	
+</div><!-- /device3 page -->
+
+
+
+<script src="../js/json_nodo_state.js"></script>
+<script src="../js/crypto/core.js"></script>
+<script src="../js/crypto/enc-base64-min.js"></script>
+
+<script src="js/setup_devices.js"></script>
+<script src="../js/user_settings2.js"></script>
+<script src="js/setup_predef_devices.js"></script>
+<script src="js/help_text.js"></script>
+
+</body>
+</html>

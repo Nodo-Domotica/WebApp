@@ -21,7 +21,8 @@ var status;
 						/\[i\](.*?)\[\/i\]/ig,
 						/\[u\](.*?)\[\/u\]/ig,
 						/\[sup\](.*?)\[\/sup\]/ig,
-						/\[sub\](.*?)\[\/sub\]/ig						
+						/\[sub\](.*?)\[\/sub\]/ig,
+						/\[blink\](.*?)\[\/blink\]/ig						
 					]; // note: NO comma after the last entry
 
 					// The matching array of strings to replace matches with
@@ -30,7 +31,8 @@ var status;
 						'<i>$1</i>',
 						'<u>$1</u>',
 						'<sup>$1</sup>',
-						'<sub>$1</sub>'
+						'<sub>$1</sub>',
+						'<span class="blink_me">$1</span>'
 					];
 
 					// Perform the actual conversion

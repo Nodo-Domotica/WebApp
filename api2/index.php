@@ -987,6 +987,64 @@ $app->get('/usersettings', function () use($app) {
 	}	
 });
 
+//Edit user settings
+$app->put('/usersettings', function () use($app) {
+    
+	global $salt;
+	
+	$request = Slim::getInstance()->request();
+    $usersettings = json_decode($request->getBody());
+	$user_login_name = htmlspecialchars($usersettings->user_login_name);
+	$webapp_title = htmlspecialchars($usersettings->webapp_title);
+	$first_name = htmlspecialchars($usersettings->first_name);
+	$last_name = htmlspecialchars($usersettings->last_name);
+	$webapp_theme = htmlspecialchars($usersettings->webapp_theme);
+	$user_password = htmlspecialchars($usersettings->user_password);
+	$user_password = md5($salt.$user_password);
+	
+			
+    try {
+       
+	   if ($user_password != '') {
+	   
+        $stmt = db()->prepare("UPDATE nodo_tbl_users SET 
+							  user_login_name=:user_login_name, 
+							  webapp_title=:webapp_title, first_name=:first_name, 
+							  last_name=:last_name, webapp_theme=:webapp_theme, user_password=:user_password 
+							  WHERE id=:userId");
+	   }
+	   else {
+		   
+		   $stmt = db()->prepare("UPDATE nodo_tbl_users SET 
+							  user_login_name=:user_login_name, 
+							  webapp_title=:webapp_title, first_name=:first_name, 
+							  last_name=:last_name, webapp_theme=:webapp_theme 
+							  WHERE id=:userId");
+		   
+	   }
+        
+		$stmt->bindValue(':userId', $app->userId, PDO::PARAM_INT);
+        $stmt->bindParam(":user_login_name", $user_login_name);
+		$stmt->bindParam(":webapp_title", $webapp_title);
+		$stmt->bindParam(":first_name", $first_name);
+		$stmt->bindParam(":last_name", $last_name);
+		$stmt->bindParam(":webapp_theme", $webapp_theme);
+		 if ($user_password != '') {
+			$stmt->bindParam(":user_password", $user_password);
+		 }
+        
+        $stmt->execute();
+        echo json_encode($usersettings);
+    
+	} 
+	catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+	
+	
+
+});
+
 //List graphs
 $app->get('/graphs', function () use($app) {
 

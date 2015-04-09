@@ -1,0 +1,117 @@
+
+<!DOCTYPE html> 
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
+	<title>Personal</title> 
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
+</head> 
+<body>
+
+<div data-role="popup" id="popupLogin" data-overlay-theme="a" data-dismissible="false" data-theme="a" class="ui-corner-all">
+    <form>
+        <div style="padding:10px 20px;">
+            <h3>Please sign in</h3>
+            <label for="un" class="ui-hidden-accessible">Username:</label>
+            <input type="text" name="user" id="un" value="" placeholder="username" data-theme="a">
+            <label for="pw" class="ui-hidden-accessible">Password:</label>
+            <input type="password" name="pass" id="pw" value="" placeholder="password" data-theme="a">
+			<input type="checkbox" name="savecreds" id="checkbox-1" value="1" data-mini="true" />
+			<label for="checkbox-1">Keep me logged in</label>
+            <a href="#" id="btnSignin" data-role="button" class="ui-btn ui-corner-all ui-shadow ui-btn-b ui-btn-icon-left ui-icon-check">Sign in</a>
+        </div>
+    </form>
+</div>
+ 
+<div data-role="page" id="personal_page">
+
+ 
+	<!-- header -->
+	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<a href="#popupMenu" class="headerButton" data-icon="bars" data-rel="popup" data-transition="slideup" data-role="button" >Menu</a>
+		<h1 id="header_setup_personal"></h1>
+		
+	</div><!-- /header -->
+ 
+	<div data-role="content">	
+
+	<form id="form_personal" data-ajax="false" > 
+	
+		<label for="title">Web App title:</label>
+		<input type="text" name="title" id="title" value=""  />
+		<br />
+		<label for="theme" class="select">Theme:</label>
+		    <select name="theme" id="theme" data-placeholder="true" data-native-menu="false">
+				<option value="b">Grey</option>
+				<option value="a">White</option>
+				<option value="e">Black</option>
+				<option value="f">Blue</option>
+				
+			</select>
+		<br />
+		<label for="user_name">User name:</label>
+		<input type="text" name="user_name" id="user_name" value="" disabled />
+		<br />
+		<label for="first_name">First name:</label>
+		<input type="text" name="first_name" id="first_name" value=""  />
+		<br />
+		<label for="last_name">Last name:</label>
+		<input type="text" name="last_name" id="last_name" value=""  />
+		<br />
+		<br \>
+			<label for="password" id="password_label" >Web App password: (leave empty to keep current password)</label>
+			<input type="password" name="password" id="password" value=""  />
+			<br \>
+			<label for="password2">Verify Web App password:</label>
+			<input type="password" name="password2" id="password2" value=""  />
+			
+			<br \>
+		
+		<br />
+			<button id="personal_btnSave">Save</button>
+		
+		
+			
+	</form> 
+	
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
+		<h1></h1>
+		
+	</div><!-- /footer -->
+	
+
+	
+	<div data-role="popup" id="popupMenu" >
+		<ul data-role="listview" data-inset="true" style="min-width:210px;">
+			<li data-role="list-divider">Menu...</li>
+			<li data-icon="home"><a href="../webapp.html" data-ajax="false">Home</a></li>
+			<li data-icon="info"><a href="../webapp.html#info_page" data-ajax="false">Info</a></li>
+			<li><a href="../webapp.html#command_page" data-ajax="false">Commands</a></li>
+			<li data-icon="gear"><a href="../admin" data-ajax="false">Setup</a></li>
+			<li data-icon="power"><a href="../logout.php" data-ajax="false">Logout</a></li>
+		</ul>
+	
+</div><!-- /main page -->
+
+
+
+<script src="../js/crypto/core.js"></script>
+<script src="../js/crypto/enc-base64-min.js"></script>
+<script src="../js/user_settings2.js"></script>
+<script src="../js/json_nodo_state.js"></script>
+<script src="js/setup_personal.js"></script>
+ 
+</body>
+</html>

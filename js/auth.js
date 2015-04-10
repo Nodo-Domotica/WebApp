@@ -34,9 +34,7 @@ $("#logon_page").on("pageinit", function() {
 				
 				jQuery(document).empty();
 				
-				if (data.page == 1) {window.location = 'webapp.html';}
-				if (data.page == 2) {window.location = 'webapp.html#activities_page';}
-				if (data.page == 3) {window.location = 'webapp.html#values_page';}
+				document.location.href = 'webapp.html'
 				
 				
 				

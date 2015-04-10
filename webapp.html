@@ -41,7 +41,7 @@
 		
 		<form id="form_alarms"> 
 	
-		<input type="hidden" maxlength="2" name="alarmnr" id="alarmnr" value=""  />
+		<input type="hidden" name="alarmnr" id="alarmnr" value=""  />
 		<div class="ui-hide-label" data-role="fieldcontain">
 		<label for="state" class="select">On/Off:</label>
 		<select name="state" id="state" data-role="slider">
@@ -195,29 +195,7 @@
 </div>
 <!-- /page -->
 
-<div data-role="page" id="alarms_page">
 
-
-	<!-- header -->
-	<div data-role="header" data-id="toolbar" data-position="fixed" data-tap-toggle="false">
-		<a href="#alarms_panel" data-icon="bars">Menu</a>
-		<h1 id="header_alarms"></h1>
-		
-	</div><!-- /header -->
- 
- 
-	<div data-role="content">	
-		<p>
-		<ul id="alarms" data-role="listview" data-split-theme="c"></ul>
-		</p>
-	</div><!-- /content -->
-	
-	<div data-role="footer" data-id="toolbar" data-position="fixed" data-tap-toggle="false" >
-		<h1></h1>
-		
-	</div>
-	
-</div><!-- /main page -->
 
 
 <div data-role="page" id="info_page">
@@ -241,7 +219,7 @@
 		<h3>Eventlog</h3>
 		
 			<div id="events_div" style="font-family:monospace"></div>
-			<br \>
+			<br>
 			<a href="api/exportevents2csv" id="download_events" data-role="button" data-icon="save" data-inline="true" data-ajax="false">Download all events as csv</a>
 		</div>	
 		
@@ -264,14 +242,14 @@
 	</div>
 	
 	<div data-role="collapsible" data-collapsed="true" data-inset="false" data-collapsed-icon="plus" data-expanded-icon="minus" data-iconpos="right">
-		<h3>Disclaimer</h3><br \>
-		<b>(C) Copyright 2015 by Martin de Graaf & Paul Tonkes, <a href="http://www.nodo-domotica.nl/" target="_blank">www.nodo-domotica.nl</a></b><br \><br \>
-		Nodo-Domotica provides the <a href="http://www.nodo-domotica.nl/webapp" target="_blank">http://www.nodo-domotica.nl/webapp</a> Website as a service to the public and Website owners.<br \><br \>
-		Nodo-Domotica is not responsible for, and expressly disclaims all liability for, damages of any kind arising out of use, reference to, or reliance on any information contained within the site. While the information contained within the site is periodically updated, no guarantee is given that the information provided in this Web site is correct, complete, and up-to-date.<br \><br \>
-		Although the Nodo-Domotica Web site may include links providing direct access to other Internet resources, including Web sites, Nodo-Domotica is not responsible for the accuracy or content of information contained in these sites. Links from Nodo-Domotica to third-party sites do not constitute an endorsement by Nodo-Domotica of the parties or their products and services. The appearance on the Web site of advertisements and product or service information does not constitute an endorsement by Nodo-Domotica, and Nodo-Domotica has not investigated the claims made by any advertiser. Product information is based solely on material received from suppliers.<br \><br \>
-		The WebApp and Nodo software are part of the 'Nodo Domotica' platform. The WebApp and all other related components are distributed under the terms of the GNU General Public License.  This program and hosting service comes with ABSOLUTELY NO WARRANTY.<br \><br \>
+		<h3>Disclaimer</h3><br>
+		<b>(C) Copyright 2015 by Martin de Graaf & Paul Tonkes, <a href="http://www.nodo-domotica.nl/" target="_blank">www.nodo-domotica.nl</a></b><br><br>
+		Nodo-Domotica provides the <a href="http://www.nodo-domotica.nl/webapp" target="_blank">http://www.nodo-domotica.nl/webapp</a> Website as a service to the public and Website owners.<br><br>
+		Nodo-Domotica is not responsible for, and expressly disclaims all liability for, damages of any kind arising out of use, reference to, or reliance on any information contained within the site. While the information contained within the site is periodically updated, no guarantee is given that the information provided in this Web site is correct, complete, and up-to-date.<br><br>
+		Although the Nodo-Domotica Web site may include links providing direct access to other Internet resources, including Web sites, Nodo-Domotica is not responsible for the accuracy or content of information contained in these sites. Links from Nodo-Domotica to third-party sites do not constitute an endorsement by Nodo-Domotica of the parties or their products and services. The appearance on the Web site of advertisements and product or service information does not constitute an endorsement by Nodo-Domotica, and Nodo-Domotica has not investigated the claims made by any advertiser. Product information is based solely on material received from suppliers.<br><br>
+		The WebApp and Nodo software are part of the 'Nodo Domotica' platform. The WebApp and all other related components are distributed under the terms of the GNU General Public License.  This program and hosting service comes with ABSOLUTELY NO WARRANTY.<br><br>
 		You should have received a copy of the GNU General Public License
-		along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/" target="_blank">http://www.gnu.org/licenses/</a>&gt;<br \><br \>
+		along with this program.  If not, see &lt;<a href="http://www.gnu.org/licenses/" target="_blank">http://www.gnu.org/licenses/</a>&gt;<br><br>
 		
 		<a href="http://www.nodo-domotica.nl/webapp/gpl.html" data-role="button" target="_blank" data-ajax="false" data-inline="false" >GNU GENERAL PUBLIC LICENSE</a>
 	</div>
@@ -302,17 +280,17 @@
 	
 	<form id="command_form" data-ajax="false" method="post"> 
 	
-	 	<br \>
-		<label for="name">Nodo command:</label>
+	 	<br>
+		<label for="command">Nodo command:</label>
 		<input type="text" name="command" id="command" value=""  />
 	
-	    <br \>
+	    <br>
         
 		<input type="submit" name="submit" value="Execute" >
 
 			
 	</form> 
-	<br \>
+	<br>
 	<div data-role="collapsible" data-collapsed="false">
 	<h4>Result:</h4>		
 	<div id="result_div" style="font-family:monospace">

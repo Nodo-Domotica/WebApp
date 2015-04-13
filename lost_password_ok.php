@@ -23,7 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<title>Nodo Web App</title> 
-	<?php require_once('include/jquery_mobile.php'); ?>
+	<link rel="stylesheet" href="themes/webapp.min.css" />
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
+	<script src="js/jq/jquery-1.11.1.min.js"></script>
+	<script src="js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="media/logo.ico" />
+	<link rel="shortcut icon" href="media/logo.ico" />
 </head> 
 
 <body> 

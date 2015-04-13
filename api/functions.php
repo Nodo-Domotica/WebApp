@@ -77,3 +77,44 @@ function evalmath($equation) {
 	 
 	return $result;
 }
+
+//Functie om het ip-adres van de client te achterhalen
+function get_ip_address() {
+    foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
+        if (array_key_exists($key, $_SERVER) === true) {
+            foreach (explode(',', $_SERVER[$key]) as $ip) {
+                if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+                    return $ip;
+                }
+            }
+        }
+    }
+}
+
+//Functie welke de HTTP headers in een array plaats. Een bepaalde header is op te vragen via bijvoorbeeld $headers=http_parse_headers(HTTPRequest("http://$nodo_ip/?event=status%20NodoIp")); $headers['Server'];
+if (!function_exists('http_parse_headers')) {
+	function http_parse_headers($header) {
+		$retVal = array();
+		$fields = explode("\r\n", preg_replace('/\x0D\x0A[\x09\x20]+/', ' ', $header));
+		foreach ($fields as $field) {
+			if (preg_match('/([^:]+): (.+)/m', $field, $match)) {
+				$match[1] = preg_replace('/(?<=^|[\x09\x20\x2D])./e', 'strtoupper("\0")', strtolower(trim($match[1])));
+				if (isset($retVal[$match[1]])) {
+					$retVal[$match[1]] = array($retVal[$match[1]], $match[2]);
+				} else {
+					$retVal[$match[1]] = trim($match[2]);
+				}
+			}
+		}
+		return $retVal;
+	}
+}
+
+function trim_br($string){
+//Deletes empty spaces and br tags on start and end of a string
+
+	 $string = preg_replace('/^\s*(?:<br\s*\/?>\s*)*/i', '', $string);
+	 $string = preg_replace('/\s*(?:<br\s*\/?>\s*)*$/i', '', $string);
+	 return	$string;
+
+}

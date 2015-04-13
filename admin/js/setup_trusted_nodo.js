@@ -15,7 +15,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -172,7 +172,7 @@ function gettrusted_nodo() {
 	
 	 $.ajax({
                 type: 'GET',
-                url: '../api2/nodosyoutrust',
+                url: '../api/nodosyoutrust',
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -250,7 +250,7 @@ function gettrusted_cmd(id) {
 	
 	 $.ajax({
                 type: 'GET',
-                url: '../api2/cmdsyoutrust/'+id,
+                url: '../api/cmdsyoutrust/'+id,
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -356,7 +356,7 @@ function DeleteTrustedNodo(id) {
 
 $.ajax({
         type: 'DELETE',
-        url: '../api2/nodosyoutrust/' + id,
+        url: '../api/nodosyoutrust/' + id,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));
@@ -389,7 +389,7 @@ function DeleteTrustedCmd(id) {
 
 $.ajax({
         type: 'DELETE',
-        url: '../api2/cmdyoutrust/' + id,
+        url: '../api/cmdyoutrust/' + id,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));
@@ -444,7 +444,7 @@ function findTrustedNodo(id) {
        $.mobile.loading( "show");
         $.ajax({
                 type: 'GET',
-                url: '../api2/nodosyoutrust/' + id,
+                url: '../api/nodosyoutrust/' + id,
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -482,7 +482,7 @@ function findTrustedCmd(id) {
        $.mobile.loading( "show");
         $.ajax({
                 type: 'GET',
-                url: '../api2/cmdyoutrust/' + id,
+                url: '../api/cmdyoutrust/' + id,
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -522,7 +522,7 @@ function addTrustedNodo() {
         $.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '../api2/nodosyoutrust',
+                url: '../api/nodosyoutrust',
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -559,7 +559,7 @@ function addTrustedCmd() {
         $.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '../api2/cmdyoutrust',
+                url: '../api/cmdyoutrust',
                 dataType: "json",
                 data: formToJSONTrustedCmd(),
 				beforeSend : function(xhr) {
@@ -598,7 +598,7 @@ function editTrustedNodo(id) {
         $.ajax({
                 type: 'PUT',
                 contentType: 'application/json',
-                url: '../api2/nodosyoutrust/' + id,
+                url: '../api/nodosyoutrust/' + id,
                 dataType: "json",
                 data: formToJSONTrustedNodo(),
 				beforeSend : function(xhr) {
@@ -635,7 +635,7 @@ function editTrustedCmd(id) {
         $.ajax({
                 type: 'PUT',
                 contentType: 'application/json',
-                url: '../api2/cmdyoutrust/' + id,
+                url: '../api/cmdyoutrust/' + id,
                 dataType: "json",
                 data: formToJSONTrustedCmd(),
 				beforeSend : function(xhr) {

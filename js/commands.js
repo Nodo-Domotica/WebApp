@@ -62,29 +62,40 @@ if (command != '') {
 				  text: "Executing command(s)",
 				  textVisible: true
 				});
-			
-		if (window.XMLHttpRequest) {
-			$http = new XMLHttpRequest();
-		} else if (window.ActiveXObject) {
-			try {
-				$http = new ActiveXObject('Msxml2.XMLHTTP');
-			} catch(e) {
-				$http = new ActiveXObject('Microsoft.XMLHTTP');
-			}
-		}
-
-		if ($http) {
-			$http.onreadystatechange = function()
-			{
-				if (/4|^complete$/.test($http.readyState)) {
+				
+				$.ajax({ 
+				type: 'POST',
+                contentType: 'text/plain',
+				 url: 'api/cmdsend/' + command, 
+				 dataType: 'text',
+				 beforeSend : function(xhr) {
+			 
+				var user = decodeURIComponent(getCookie("USERID"));
+				var password = decodeURIComponent(getCookie("TOKEN"));
+			 	var words  = CryptoJS.enc.Utf8.parse(user + ":" + password);
+				var base64 = CryptoJS.enc.Base64.stringify(words);
+                
+				xhr.setRequestHeader("Authorization", "Basic " + base64);
+	            },
+				error : function(xhr, ajaxOptions, thrownError) {
+				if (xhr.status==403) { 
+					$.mobile.changePage( "#login_page", { transition: "none"} );
 					
-					 $.mobile.loading( "hide");	
-					element.innerHTML = $http.responseText;  
 				}
-			};
-			$http.open('POST', 'api/cmdsend/' + command +'?' + new Date().getTime(), true);
-			$http.send(null);
-		}
+				},
+         success: function(data) {
+ 			
+		 $.mobile.loading( "hide");	
+					element.innerHTML = data;  
+		
+	
+			
+			
+			
+	}	
+});
+			
+		
 
 	}
 

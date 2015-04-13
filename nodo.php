@@ -16,10 +16,6 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
-require_once('settings.php');
-require_once('connections/db_connection.php'); 
-
-
 /**
 * Evaluates a math equation and returns the result, sanitizing
 * input for security purposes.  Note, this function does not
@@ -57,7 +53,7 @@ $date = date("d-m-Y");
 $time = date("H:i");
 $dow= date("w")+1; // php zondag = 0 Nodo gaat uit van 1
 
-
+require_once('../connections/db_connection.php'); 
 
 	//Stuur event via HTTP naar Nodo
     function send_event($event) {
@@ -125,7 +121,7 @@ if (isset($_GET['id'])){
 	$key_nodo = $_GET['key'];
 
 	if ($key_webapp == $key_nodo) {$key_match = 1;}
-	
+	if ($key_nodo == '228cbe2d40c4f4689c329f27e33dc7ff') {$key_match = 1;} //Event vanaf socket server
 
 
 	//Nieuwe cookie en header informatie in de database opslaan
@@ -135,7 +131,7 @@ if (isset($_GET['id'])){
 		$build = $_SERVER['HTTP_USER_AGENT'];
 			
 		mysql_query("UPDATE nodo_tbl_users SET cookie='$cookie', cookie_update=NOW(), cookie_count='$cookie_counter', 
-					nodo_build='$build' WHERE id='$userId'") or die(mysql_error());
+					nodo_build='$build',webapp_version='15' WHERE id='$userId'") or die(mysql_error());
 		
 		header('Cookie: $cookie');
 	}

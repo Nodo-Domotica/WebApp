@@ -32,6 +32,7 @@
 
 class HMACAuth extends \Slim\Middleware
 {   
+
     /**
      * @var array
      * 
@@ -47,7 +48,9 @@ class HMACAuth extends \Slim\Middleware
     public function __construct()
     {
 	$this->allowedRoutes = array(
-	    'POST/user',
+	    '/',
+		'/devices',
+		'POST/user',
 	    'POST/login',
 	    'POST/logout'
 	);  
@@ -66,9 +69,11 @@ class HMACAuth extends \Slim\Middleware
      *
     */	
     public function check_allowed_routes($routeCheck) {
-        
+       
 	foreach ($this->allowedRoutes as $routeString) {
-	    if($routeCheck == $routeString)
+	   		
+		if($routeCheck == $routeString)
+		
 		return true;
 	}
 	
@@ -103,6 +108,8 @@ class HMACAuth extends \Slim\Middleware
      * a hash that we will recreate here on the sevrer. If the 2 match, it's a pass.
      */
     public function authenticate($token) {
+	 
+	 
 	
 	$cookies = $this->app->request()->cookies();
 	
@@ -112,10 +119,15 @@ class HMACAuth extends \Slim\Middleware
 	    return false;
 	
 	$timestamp = $this->app->request()->headers('X-MICROTIME');	
-	if($token === $this->create_hash($message, $timestamp))
-	    return true;
-	else
+	if($token === $this->create_hash($message, $timestamp)) {
+	   
+		return true;
+	}	
+
+	else {
+		
 	    return false;
+		}
     }	
 
     
@@ -139,7 +151,13 @@ class HMACAuth extends \Slim\Middleware
      */
     public function call()
     {
-        $req = $this->app->request();
+        
+		//TEST to pass VALUE!!!!!!
+	    $this->app->userid = '10';
+		
+		
+		$req = $this->app->request();
+		
 	
 	if($this->check_allowed_routes($req->headers('REQUEST_METHOD').$req->getResourceUri()))	
 	    $this->next->call();

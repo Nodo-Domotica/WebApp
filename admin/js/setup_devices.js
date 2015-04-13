@@ -17,7 +17,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -209,7 +209,7 @@ function addDevice() {
 	$.ajax({
 		type : 'POST',
 		contentType : 'application/json',
-		url : '../api2/devices',
+		url : '../api/devices',
 		dataType : "json",
 		data : formToJSONDevice(),
 		beforeSend : function(xhr) {
@@ -248,7 +248,7 @@ function editDevice(id) {
 	$.ajax({
 		type : 'PUT',
 		contentType : 'application/json',
-		url : '../api2/devices/' + id,
+		url : '../api/devices/' + id,
 		dataType : "json",
 		data : formToJSONDevice(),
 			beforeSend : function(xhr) {
@@ -284,7 +284,7 @@ function findDevice(id) {
 	$.mobile.loading("show");
 	$.ajax({
 		type : 'GET',
-		url : '../api2/devices/' + id,
+		url : '../api/devices/' + id,
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -341,7 +341,7 @@ function addDeviceCmd(deviceType) {
 	$.ajax({
 		type : 'POST',
 		contentType : 'application/json',
-		url : '../api2/devicecmd',
+		url : '../api/devicecmd',
 		dataType : "json",
 		data : formToJSONDeviceCmd(),
 			beforeSend : function(xhr) {
@@ -382,7 +382,7 @@ function editDeviceCmd(id, deviceType) {
 	$.ajax({
 		type : 'PUT',
 		contentType : 'application/json',
-		url : '../api2/devicecmd/' + id,
+		url : '../api/devicecmd/' + id,
 		dataType : "json",
 		data : formToJSONDeviceCmd(),
 		beforeSend : function(xhr) {
@@ -418,7 +418,7 @@ function findDeviceCmd(id, deviceType) {
 	$.mobile.loading("show");
 	$.ajax({
 		type : 'GET',
-		url : '../api2/devicecmd/' + id,
+		url : '../api/devicecmd/' + id,
 		dataType : "json",
 		beforeSend : function(xhr) {
 		 
@@ -673,7 +673,7 @@ function getGroups(div) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/groups',
+		url : '../api/groups',
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -722,7 +722,7 @@ function getIndicatorPlaceholders(objectid, placeholderid) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/indicatorplaceholders/' + objectid,
+		url : '../api/indicatorplaceholders/' + objectid,
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -785,7 +785,7 @@ function getGraphs() {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/graphs',
+		url : '../api/graphs',
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -954,7 +954,7 @@ function getDevices(sort_id) {
 	
 	$.ajax({
 		type : 'GET',
-		url : '../api2/devices',
+		url : '../api/devices',
 		dataType : "json",
 		beforeSend : function (xhr) {
 
@@ -1058,7 +1058,7 @@ function getDeviceCmds(sort_id, id, deviceType) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/devicecmds/' + id,
+		url : '../api/devicecmds/' + id,
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -1270,7 +1270,7 @@ function deleteDevice() {
 
 	$.ajax({
 		type : 'DELETE',
-		url : '../api2/devices/' + DeviceID,
+		url : '../api/devices/' + DeviceID,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));
@@ -1308,7 +1308,7 @@ function deleteDeviceExtra() {
 	
 	$.ajax({
 		type : 'DELETE',
-		url : '../api2/devicecmd/' + IDExtra,
+		url : '../api/devicecmd/' + IDExtra,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));
@@ -1349,7 +1349,7 @@ function sortDevice(DeviceId, sort_up_down) {
 	$.ajax({
 		type : 'PUT',
 		contentType : 'application/json',
-		url : '../api2/sortdevice/' + DeviceId + '/' + sort_up_down,
+		url : '../api/sortdevice/' + DeviceId + '/' + sort_up_down,
 		dataType : "json",
 		data : '',
 		beforeSend : function(xhr) {
@@ -1389,7 +1389,7 @@ function sortDeviceExtra(Id, sort_up_down, object_id, deviceType) {
 	
 	$.ajax({
 		type : 'PUT',
-		url : '../api2/sortdevicecmd/' + Id +'/' + sort_up_down,
+		url : '../api/sortdevicecmd/' + Id +'/' + sort_up_down,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));

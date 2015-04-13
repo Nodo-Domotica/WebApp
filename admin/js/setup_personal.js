@@ -48,7 +48,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -118,7 +118,7 @@ function getUserSettings() {
 	$.mobile.loading("show");
 	$.ajax({
 		type : 'GET',
-		url : '../api2/usersettings',
+		url : '../api/usersettings',
 		dataType : "json",
 		beforeSend : function (xhr) {
 
@@ -153,7 +153,7 @@ function editUser() {
 	$.ajax({
 		type : 'PUT',
 		contentType : 'application/json',
-		url : '../api2/usersettings',
+		url : '../api/usersettings',
 		dataType : "json",
 		data : formToJSONUser(),
 		beforeSend : function (xhr) {

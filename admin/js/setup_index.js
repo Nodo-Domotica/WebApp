@@ -1,5 +1,5 @@
 $('#setup_page').on('pageinit', function(event) {
-	checkSession();
+	
 	
 	if (usergroup == 'admin') {
 		
@@ -16,7 +16,7 @@ $('#setup_page').on('pageshow', function(event) {
 	
 	pagetitle='Setup';
 	
-	checkSession();
+	
     $('#header_setup_index').append('<div id="nodostate">'+pagetitle+'</div>');
 	Nodo_State();
 	

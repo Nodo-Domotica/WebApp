@@ -18,7 +18,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -94,7 +94,7 @@ function getFiles() {
  $.ajax({
                 type: 'GET',
                 contentType: 'application/json',
-                url: '../api2/filelist',
+                url: '../api/filelist',
                 dataType: "json",
                	beforeSend : function(xhr) {
 			 	var user = decodeURIComponent(getCookie("USERID"));
@@ -167,7 +167,7 @@ $('#scriptfile').change( function( e ) {
 				 $.ajax({
                 type: 'GET',
                 contentType: 'text/plain',
-                url: '../api2/getfile/' + $('#scriptfile').val(),
+                url: '../api/getfile/' + $('#scriptfile').val(),
                 dataType: "text",
                	beforeSend : function(xhr) {
 			 
@@ -219,7 +219,7 @@ $('#eventlist').click( function( e ) {
 		 $.ajax({
                 type: 'GET',
                 contentType: 'text/plain',
-                url: '../api2/getfile/EVENTLST' ,
+                url: '../api/getfile/EVENTLST' ,
                 dataType: "text",
                	beforeSend : function(xhr) {
 			 
@@ -272,7 +272,7 @@ $('#write').click( function( e ) {
 				$.ajax({
                 type: 'POST',
                 contentType: 'text/plain',
-                url: '../api2/writefile',
+                url: '../api/writefile',
                 dataType: "text",
                 data: formToJSON(),
 				beforeSend : function(xhr) {
@@ -315,7 +315,7 @@ $('#write').click( function( e ) {
 				$.ajax({
                 type: 'POST',
                 contentType: 'text/plain',
-                url: '../api2/writefile',
+                url: '../api/writefile',
                 dataType: "text",
                 data: formToJSON(),
 				beforeSend : function(xhr) {
@@ -399,7 +399,7 @@ $('#new3').click(function( e ) {
 		 $.ajax({
                 type: 'POST',
                 contentType: 'text/plain',
-                url: '../api2/newfile/' + $('#scriptfilenew').val(),
+                url: '../api/newfile/' + $('#scriptfilenew').val(),
                 dataType: "text",
               	beforeSend : function(xhr) {
 			 
@@ -474,7 +474,7 @@ $('#delete3').click(function( e ) {
 	 $.ajax({
                 type: 'DELETE',
                 contentType: 'text/plain',
-                url: '../api2/deletefile/' + $('#scriptfile').val(),
+                url: '../api/deletefile/' + $('#scriptfile').val(),
                 dataType: "text",
               	beforeSend : function(xhr) {
 			 

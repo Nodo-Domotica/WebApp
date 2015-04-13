@@ -1,5 +1,5 @@
 $('#info_page').on('pageinit', function(event) {
-   checkSession();
+   
    $('#webappdetails').append('<b>Web App version: </b>'+ webappversion +'<br \>' +
 							  '<b>Nodo IP-address: </b>'+ nodoip + ':' + nodoport + '<br \>').trigger("create");
      
@@ -10,7 +10,7 @@ $('#info_page').on('pageshow', function(event) {
 	
 	pagetitle='Info';
 	
-	checkSession();
+	
     Get_Nodo_Events();
 	Get_Nodo_Messages();
     varEventsTimer=setInterval(function() {Get_Nodo_Events()},5000);

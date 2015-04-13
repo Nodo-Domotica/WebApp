@@ -47,21 +47,23 @@ function checkTime(i) {
 }
 
 $('#devices_page').on('pageinit', function (event) {
-	checkSession();
-	getDevices();
+	
+	
 	$('#GroupSelectButton').hide();
 	$("div.ui-input-search").hide(); //zoekveld verbergen
-	
+
 	startClock();
 
 });
 
 $('#devices_page').on('pageshow', function (event) {
+	
+	
 	pagetitle = webapp_title;
-
+	getDevices();
 	//Device status loop opstarten indien de pagina word weergegeven
-	checkSession();
-	Device_State();
+	
+	//Device_State();
 	DeviceTimer = setInterval(function () {
 			Device_State()
 		}, 5000);
@@ -188,17 +190,30 @@ function update_color(color, cmd, id) {
 
 function update_cmd_state(index) {
 
-	console.log('update state');
-
-	//$("#devices_extra_panel_content_error").empty();
-	//$("#devices_extra_panel_content_error").append('<br><small><b>DEBUG: updating state ' + index + '</b> TimerID: '+DeviceCmdTimer+'</small>');
-
+	//console.log('update state');
 
 	$.ajax({
-		type : 'GET',
 		url : 'api/devicecmds/' + index,
 		dataType : "json",
+		beforeSend : function (xhr) {
+
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
+
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				
+			}
+		},
 		success : function (data) {
+
 			$.each(data.devicecmds, function (index, devicecmd) {
 
 				if (prevValue[index] != devicecmd.state) { //alleen uitvoeren als de laatst opgehaalde waarde anders is dan de vorige om te voorkomen dat de slider of spinner onder het instellen terug schieten naar de oude waarde.
@@ -229,8 +244,6 @@ function update_cmd_state(index) {
 					var indicator_icon = devicecmd.indicator_icon;
 					var indicator_placeholderDivId = '#indicator_placeholder' + devicecmd.id;
 					var indicator_placeholder_iconDivId = '#indicator_placeholder_icon' + devicecmd.id;
-					
-					
 
 					if (devicecmd.indicator_text != '' && devicecmd.indicator_icon > 0) {
 						$(indicator_placeholderDivId).html('<img src="" class="indicator_icon" id="indicator_placeholder_icon' + devicecmd.id + '" > ' + devicecmd.indicator_text);
@@ -254,88 +267,153 @@ function update_cmd_state(index) {
 
 function getDevices() {
 
-	$.getJSON('api/devices', function (data) {
+	$.ajax({
+		url : 'api/devices',
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		devices = data.devices;
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		$('#deviceslist').empty();
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				
+			}
+		},
+		success : function (data) {
 
-		if (data.devices != null) {
+			devices = data.devices;
 
-			$.each(devices, function (index, device) {
+			$('#deviceslist').empty();
 
-				ArrDeviceID[index] = device.id;
-				ArrDeviceName[index] = device.description;
+			if (data.devices != null) {
 
-				if (device.type == 1) {
-					$('#deviceslist').append('<li data-icon="carat-r" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenDevicePanel(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				} else if (device.type == 2) {
-					$('#deviceslist').append('<li data-icon="carat-r" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenRemotePage(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				} else if (device.type == 3) {
-					$('#deviceslist').append('<li data-icon="action" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:ExecActivity(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				} else if (device.type == 4) {
-					$('#deviceslist').append('<li data-icon="false" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="#" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				} else if (device.type == 5) {
-					$('#deviceslist').append('<li data-icon="graph" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenGraph(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				} else if (device.type == 6) {
-					$('#deviceslist').append('<li data-icon="clock" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenAlarmPanel(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
-				}
-			});
+				$.each(devices, function (index, device) {
+
+					ArrDeviceID[index] = device.id;
+					ArrDeviceName[index] = device.description;
+
+					if (device.type == 1) {
+						$('#deviceslist').append('<li data-icon="carat-r" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenDevicePanel(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					} else if (device.type == 2) {
+						$('#deviceslist').append('<li data-icon="carat-r" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenRemotePage(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					} else if (device.type == 3) {
+						$('#deviceslist').append('<li data-icon="action" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:ExecActivity(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					} else if (device.type == 4) {
+						$('#deviceslist').append('<li data-icon="false" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="#" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					} else if (device.type == 5) {
+						$('#deviceslist').append('<li data-icon="graph" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenGraph(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					} else if (device.type == 6) {
+						$('#deviceslist').append('<li data-icon="clock" class="ui-shadow-icon" data-filtertext="' + device.group_id + '"><a id=switch_description' + device.id + ' href="javascript:OpenAlarmPanel(' + index + ')" data-ajax="false"><img src="media/' + device.icon + '.png" class="ui-li-icon" id=switch_' + device.id + ' >' + device.description + '</a></li>');
+					}
+				});
+			}
+
+			$('#deviceslist').listview('refresh');
+
+			getGroups();
+
+			Device_State();
+
 		}
-
-		$('#deviceslist').listview('refresh');
-
-		getGroups();
-
-		Device_State();
-
 	});
+
 }
 
 function getGroups() {
 
-	$.getJSON('api/groups', function (data) {
+	$.ajax({
+		url : 'api/groups',
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		if (data.groups != null) {
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-			groups = data.groups;
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				
+			}
+		},
+		success : function (data) {}
+	});
 
-			$('#devicegrouppopuplist').append('<li data-icon="search"><a href="javascript:filterDevice(&quot;&quot;,&quot;All objects&quot;)" data-ajax="false">All objects</a></li>');
+	$.ajax({
+		url : 'api/groups',
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-			$.each(groups, function (index, group) {
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-				DeviceGroupIndex = index;
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				
+			}
+		},
+		success : function (data) {
 
-				$('#devicegrouppopuplist').append('<li data-icon="search"><a href="javascript:filterDevice(' + group.id + ',&quot;' + group.name + '&quot;)" data-ajax="false">' + group.name + '</a></li>');
+			if (data.groups != null) {
 
-			});
+				groups = data.groups;
 
-			if (DeviceGroupIndex >= 0) {
+				$('#devicegrouppopuplist').append('<li data-icon="search"><a href="javascript:filterDevice(&quot;&quot;,&quot;All objects&quot;)" data-ajax="false">All objects</a></li>');
 
-				$('#GroupSelectButton').show(); //Alleen de group button weergeven indien er groepen zijn gedefinieerd
+				$.each(groups, function (index, group) {
 
-			} else {
-				//Er zijn geen groepen eventueel opgeslagen cookie verwijderen.
-				setCookie("groupid", '', 365);
-				setCookie("groupname", 'All Objects', 365);
+					DeviceGroupIndex = index;
+
+					$('#devicegrouppopuplist').append('<li data-icon="search"><a href="javascript:filterDevice(' + group.id + ',&quot;' + group.name + '&quot;)" data-ajax="false">' + group.name + '</a></li>');
+
+				});
+
+				if (DeviceGroupIndex >= 0) {
+
+					$('#GroupSelectButton').show(); //Alleen de group button weergeven indien er groepen zijn gedefinieerd
+
+				} else {
+					//Er zijn geen groepen eventueel opgeslagen cookie verwijderen.
+					setCookie("groupid", '', 365);
+					setCookie("groupname", 'All Objects', 365);
+
+				}
+
+				$('#devicegrouppopuplist').listview('refresh');
+
+				var groupId = getCookie("groupid");
+				var groupName = getCookie("groupname");
+
+				if (groupId != "" && groupName != "") {
+					filterDevice(groupId, groupName);
+				} //Als er een standaard groep is gedefinieerd dan filteren we de lijst na het openen van de pagina
+
 
 			}
 
-			$('#devicegrouppopuplist').listview('refresh');
-
-			var groupId = getCookie("groupid");
-			var groupName = getCookie("groupname");
-
-			if (groupId != "" && groupName != "") {
-				filterDevice(groupId, groupName);
-			} //Als er een standaard groep is gedefinieerd dan filteren we de lijst na het openen van de pagina
-
-
 		}
-
 	});
 
-	//$('#deviceslist').show();
 }
 
 function filterDevice(id, name) {
@@ -366,102 +444,125 @@ function OpenDevicePanel(index) {
 	panelhtml = '';
 	panelhtml = panelhtml + '<h4>' + ArrDeviceName[DeviceIndex] + '</h4>'
 
-		$.getJSON('api/devicecmds/' + ArrDeviceID[DeviceIndex], function (data) {
+		$.ajax({
+			url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
+			dataType : "json",
+			beforeSend : function (xhr) {
 
-			devicecmds = data.devicecmds;
+				var user = decodeURIComponent(getCookie("USERID"));
+				var password = decodeURIComponent(getCookie("TOKEN"));
+				var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+				var base64 = CryptoJS.enc.Base64.stringify(words);
 
-			$('#devices li').remove();
+				xhr.setRequestHeader("Authorization", "Basic " + base64);
+			},
+			error : function (xhr, ajaxOptions, thrownError) {
+				if (xhr.status == 403) {
+					$.mobile.changePage("#login_page", {
+						transition : "none"
+					});
+					//$('#popupLogin').popup();
+					//$('#popupLogin').popup("open");
+				}
+			},
+			success : function (data) {
 
-			if (data.devicecmds != null) {
+				devicecmds = data.devicecmds;
 
-				$.each(devicecmds, function (index, devicecmd) {
+				$('#devices li').remove();
 
-					NodoCommand = devicecmd.command;
+				if (data.devicecmds != null) {
 
-					//BUTTON
-					if (devicecmd.type == 1) {
-						panelhtml = panelhtml + '<a href="javascript:send_event(&quot;' + NodoCommand + '&quot;,&quot;device&quot;)" class="ui-btn ui-shadow ui-corner-all">' + devicecmd.description + '</a>';
-					}
+					$.each(devicecmds, function (index, devicecmd) {
 
-					//SLIDER 1...16
-					if (devicecmd.type == 2) {
+						NodoCommand = devicecmd.command;
 
-						panelhtml = panelhtml + ' <label for="slider' + devicecmd.id + ' ">' + devicecmd.description + '</label><input  name="distSlider" id="distSlider' + devicecmd.id + '" value="' + devicecmd.state + '" min="' + devicecmd.webapp_par1 + '" max="' + devicecmd.webapp_par2 + '" step="' + devicecmd.webapp_par3 + '" data-type="range" onChange="update_distance_device_timer(' + devicecmd.id + ',\'' + NodoCommand + '\')">';
-
-					}
-
-					//COLOR WHEEL
-					if (devicecmd.type == 3) {
-
-						rec_value = devicecmd.rec_value
-
-							var rgb = 'rgb(' + devicecmd.state + ')'
-							var colorwheelState = '#' + rgbToHex(rgb);
-
-						//console.log(stateToHex);
-
-						panelhtml = panelhtml + ('<div id="callback_colorwheel' + devicecmd.id + '">' +
-
-								'<div >' +
-								'<div style="float:left; width:100%; margin-bottom:20px">' +
-								'<div class="colorwheel' + devicecmd.id + '" style="float:right; margin-right:20px; width:200px; text-align:left;"></div>' +
-								'</div>' +
-								'</div>' +
-
-								'<script type="text/javascript">' +
-								'var cw' + devicecmd.id + ' = Raphael.colorwheel($("#callback_colorwheel' + devicecmd.id + ' .colorwheel' + devicecmd.id + '")[0],200,180);' +
-								'cw' + devicecmd.id + '.color("' + colorwheelState + '");' +
-								'cw' + devicecmd.id + '.onchange(function(color)' +
-								'{' +
-								'update_color_timer(color.hex' + ',\'' + NodoCommand + '\',\'' + devicecmd.id + '\');' +
-								'})' +
-								'</script>');
-					}
-					//Input spinner
-					if (devicecmd.type == 4) {
-
-						var stateValue;
-
-						if (devicecmd.state != '') {
-							stateValue = parseFloat(devicecmd.state);
-						} else {
-							stateValue = devicecmd.webapp_par1;
+						//BUTTON
+						if (devicecmd.type == 1) {
+							panelhtml = panelhtml + '<a href="javascript:send_event(&quot;' + NodoCommand + '&quot;,&quot;device&quot;)" class="ui-btn ui-shadow ui-corner-all">' + devicecmd.description + '</a>';
 						}
 
-						panelhtml = panelhtml + ' <label for="spinner' + devicecmd.id + ' ">' + devicecmd.description + '</label><input class="spinner" name="spinner" id="spinner' + devicecmd.id + '" value="' + stateValue + devicecmd.webapp_par4 + '" min="' + devicecmd.webapp_par1 + '" max="' + devicecmd.webapp_par2 + '" step="' + devicecmd.webapp_par3 + '" suffix="' + devicecmd.webapp_par4 + '" readonly="readonly" data-role="spinbox" data-options=\'\{"type":"vertical"\}\' onChange="update_spinbox_device_timer(' + devicecmd.id + ',\'' + NodoCommand + '\')">';
+						//SLIDER 1...16
+						if (devicecmd.type == 2) {
 
-					}
+							panelhtml = panelhtml + ' <label for="slider' + devicecmd.id + ' ">' + devicecmd.description + '</label><input  name="distSlider" id="distSlider' + devicecmd.id + '" value="' + devicecmd.state + '" min="' + devicecmd.webapp_par1 + '" max="' + devicecmd.webapp_par2 + '" step="' + devicecmd.webapp_par3 + '" data-type="range" onChange="update_distance_device_timer(' + devicecmd.id + ',\'' + NodoCommand + '\')">';
 
-					//Indicator
-					if (devicecmd.type == 6) {
-
-						if (devicecmd.indicator_icon > 0) {
-							panelhtml = panelhtml + '<div id="indicator_placeholder' + devicecmd.id + '"><img src="" class="indicator_icon" id="indicator_placeholder_icon' + devicecmd.id + '" > ' + devicecmd.description + '</div>';
-						} else {
-							panelhtml = panelhtml + '<div id="indicator_placeholder' + devicecmd.id + '">' + devicecmd.description + '</div>';
 						}
-					}
 
-					//Line & Empty space
-					if (devicecmd.type == 99) {
-						panelhtml = panelhtml + devicecmd.description + '</BR>';
-					}
-				});
+						//COLOR WHEEL
+						if (devicecmd.type == 3) {
+
+							rec_value = devicecmd.rec_value
+
+								var rgb = 'rgb(' + devicecmd.state + ')'
+								var colorwheelState = '#' + rgbToHex(rgb);
+
+							//console.log(stateToHex);
+
+							panelhtml = panelhtml + ('<div id="callback_colorwheel' + devicecmd.id + '">' +
+
+									'<div >' +
+									'<div style="float:left; width:100%; margin-bottom:20px">' +
+									'<div class="colorwheel' + devicecmd.id + '" style="float:right; margin-right:20px; width:200px; text-align:left;"></div>' +
+									'</div>' +
+									'</div>' +
+
+									'<script type="text/javascript">' +
+									'var cw' + devicecmd.id + ' = Raphael.colorwheel($("#callback_colorwheel' + devicecmd.id + ' .colorwheel' + devicecmd.id + '")[0],200,180);' +
+									'cw' + devicecmd.id + '.color("' + colorwheelState + '");' +
+									'cw' + devicecmd.id + '.onchange(function(color)' +
+									'{' +
+									'update_color_timer(color.hex' + ',\'' + NodoCommand + '\',\'' + devicecmd.id + '\');' +
+									'})' +
+									'</script>');
+						}
+						//Input spinner
+						if (devicecmd.type == 4) {
+
+							var stateValue;
+
+							if (devicecmd.state != '') {
+								stateValue = parseFloat(devicecmd.state);
+							} else {
+								stateValue = devicecmd.webapp_par1;
+							}
+
+							panelhtml = panelhtml + ' <label for="spinner' + devicecmd.id + ' ">' + devicecmd.description + '</label><input class="spinner" name="spinner" id="spinner' + devicecmd.id + '" value="' + stateValue + devicecmd.webapp_par4 + '" min="' + devicecmd.webapp_par1 + '" max="' + devicecmd.webapp_par2 + '" step="' + devicecmd.webapp_par3 + '" suffix="' + devicecmd.webapp_par4 + '" readonly="readonly" data-role="spinbox" data-options=\'\{"type":"vertical"\}\' onChange="update_spinbox_device_timer(' + devicecmd.id + ',\'' + NodoCommand + '\')">';
+
+						}
+
+						//Indicator
+						if (devicecmd.type == 6) {
+
+							if (devicecmd.indicator_icon > 0) {
+								panelhtml = panelhtml + '<div id="indicator_placeholder' + devicecmd.id + '"><img src="" class="indicator_icon" id="indicator_placeholder_icon' + devicecmd.id + '" > ' + devicecmd.description + '</div>';
+							} else {
+								panelhtml = panelhtml + '<div id="indicator_placeholder' + devicecmd.id + '">' + devicecmd.description + '</div>';
+							}
+						}
+
+						//Line & Empty space
+						if (devicecmd.type == 99) {
+							panelhtml = panelhtml + devicecmd.description + '</BR>';
+						}
+					});
+				}
+
+				$("#devices_extra_panel_content").html(panelhtml);
+
+				$("#devices_extra_panel").trigger("create");
+
+				update_cmd_state(ArrDeviceID[DeviceIndex]);
+
+				DeviceCmdTimerArr.push(setInterval(function () {
+						update_cmd_state(ArrDeviceID[DeviceIndex]);
+					}, 2000));
+
+				$("#devices_extra_panel").panel("open");
+
 			}
-
-			$("#devices_extra_panel_content").html(panelhtml);
-
-			$("#devices_extra_panel").trigger("create");
-
-			update_cmd_state(ArrDeviceID[DeviceIndex]);
-
-			DeviceCmdTimerArr.push(setInterval(function () {
-					update_cmd_state(ArrDeviceID[DeviceIndex]);
-				}, 2000));
-
-			$("#devices_extra_panel").panel("open");
-
 		});
+
 }
 
 $("#devices_extra_panel").on("panelclose", function (event, ui) {
@@ -477,53 +578,75 @@ function OpenRemotePage(index) {
 	$("#header_remote").html(ArrDeviceName[DeviceIndex]);
 	x = 1;
 
-	$.getJSON('api/devicecmds/' + ArrDeviceID[DeviceIndex], function (data) {
+	$.ajax({
+		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		devicecmds = data.devicecmds;
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		$('#remote_grid').html('');
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				//$('#popupLogin').popup();
+				//$('#popupLogin').popup("open");
+			}
+		},
+		success : function (data) {
 
-		if (data.devicecmds != null) {
+			devicecmds = data.devicecmds;
 
-			$.each(devicecmds, function (index, devicecmd) {
+			$('#remote_grid').html('');
 
-				NodoCommand = devicecmd.command;
+			if (data.devicecmds != null) {
 
-				if (x == 1) {
-					block = 'ui-block-a';
-				}
-				if (x == 2) {
-					block = 'ui-block-b';
-				}
-				if (x == 3) {
-					block = 'ui-block-c';
-				}
+				$.each(devicecmds, function (index, devicecmd) {
 
-				//BUTTON
-				if (devicecmd.type == 1) {
-					html = html + '<div id="' + devicecmd.id + '" class="' + block + '"><a href="javascript:send_event(&quot;' + NodoCommand + '&quot;)" class="ui-shadow ui-btn ui-corner-all ui-mini ">' + devicecmd.description + '</a></div>';
-					//html = html + '<script>var btntimer' + devicecmd.id + ';$("#' + devicecmd.id + '").on("taphold",function(){btntimer' + devicecmd.id + '=setInterval(function () {send_event(\'' + NodoCommand + '\')}, 1000);});'
-					//html = html + '$("#' + devicecmd.id + '").on("vmouseup",function(){clearInterval(btntimer' + devicecmd.id + ')});</script>'
-				}
+					NodoCommand = devicecmd.command;
 
-				if (devicecmd.type == 99) {
-					html = html + '<div class="' + block + '"></div>';
-				}
+					if (x == 1) {
+						block = 'ui-block-a';
+					}
+					if (x == 2) {
+						block = 'ui-block-b';
+					}
+					if (x == 3) {
+						block = 'ui-block-c';
+					}
 
-				x++;
-				if (x > 3) {
-					x = 1;
-				}
+					//BUTTON
+					if (devicecmd.type == 1) {
+						html = html + '<div id="' + devicecmd.id + '" class="' + block + '"><a href="javascript:send_event(&quot;' + NodoCommand + '&quot;)" class="ui-shadow ui-btn ui-corner-all ui-mini ">' + devicecmd.description + '</a></div>';
+						//html = html + '<script>var btntimer' + devicecmd.id + ';$("#' + devicecmd.id + '").on("taphold",function(){btntimer' + devicecmd.id + '=setInterval(function () {send_event(\'' + NodoCommand + '\')}, 1000);});'
+						//html = html + '$("#' + devicecmd.id + '").on("vmouseup",function(){clearInterval(btntimer' + devicecmd.id + ')});</script>'
+					}
 
+					if (devicecmd.type == 99) {
+						html = html + '<div class="' + block + '"></div>';
+					}
+
+					x++;
+					if (x > 3) {
+						x = 1;
+					}
+
+				});
+			}
+
+			//alert(html);
+			$("#remote_grid").html(html);
+			$.mobile.changePage("#remote_page", {
+				transition : "none"
 			});
+
 		}
-
-		//alert(html);
-		$("#remote_grid").html(html);
-		$.mobile.changePage("#remote_page", {
-			transition : "none"
-		});
-
 	});
 
 };
@@ -532,31 +655,50 @@ function ExecActivity(index) {
 	DeviceIndex = index;
 	NodoCommand = '';
 
-	//$.mobile.loading( "show");
-	$.getJSON('api/devicecmds/' + ArrDeviceID[DeviceIndex], function (data) {
+	$.ajax({
+		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		devicecmds = data.devicecmds;
-		var nrofdevicecmds = (data.devicecmds.length);
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		if (data.devicecmds != '') {
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				//$('#popupLogin').popup();
+				//$('#popupLogin').popup("open");
+			}
+		},
+		success : function (data) {
 
-			$.each(devicecmds, function (index, devicecmd) {
+			devicecmds = data.devicecmds;
+			var nrofdevicecmds = (data.devicecmds.length);
 
-				if (index + 1 != nrofdevicecmds) {
-					NodoCommand = NodoCommand + devicecmd.command + ';';
-				} else {
-					NodoCommand = NodoCommand + devicecmd.command;
-				}
+			if (data.devicecmds != '') {
 
-			});
+				$.each(devicecmds, function (index, devicecmd) {
 
-			send_event(NodoCommand);
+					if (index + 1 != nrofdevicecmds) {
+						NodoCommand = NodoCommand + devicecmd.command + ';';
+					} else {
+						NodoCommand = NodoCommand + devicecmd.command;
+					}
+
+				});
+
+				send_event(NodoCommand);
+			}
+
 		}
-
-		//$.mobile.loading( "hide");
-
-
 	});
+
 }
 
 function OpenGraph(index) {
@@ -564,317 +706,459 @@ function OpenGraph(index) {
 	ValueHtml = '';
 	$('#graph').empty();
 
-	//$.mobile.loading( "show");
-	$.getJSON('api/devicecmds/' + ArrDeviceID[DeviceIndex], function (data) {
+	$.ajax({
+		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		devicecmds = data.devicecmds;
-		var nrofdevicecmds = (data.devicecmds.length);
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		if (data.devicecmds != '') {
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				//$('#popupLogin').popup();
+				//$('#popupLogin').popup("open");
+			}
+		},
+		success : function (data) {
 
-			$.each(devicecmds, function (index, devicecmd) {
+			devicecmds = data.devicecmds;
+			var nrofdevicecmds = (data.devicecmds.length);
 
-				if (devicecmd.type == 20 || devicecmd.type == 120 || devicecmd.type == 21 || devicecmd.type == 121) { //line graph
+			if (data.devicecmds != '') {
 
-					var options = {
+				$.each(devicecmds, function (index, devicecmd) {
 
-						xaxis : {
-							mode : "time",
-							minTickSize : [1, 'minute']
-						},
-						legend : {
-							backgroundOpacity : 0
-						},
-						shadowSize : 2
-					};
+					if (devicecmd.type == 20 || devicecmd.type == 120 || devicecmd.type == 21 || devicecmd.type == 121) { //line graph
 
-					if (devicecmd.type == 120 || devicecmd.type == 121) {
-						url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
-					} else {
-						url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
-					}
+						var options = {
 
-					ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
-					ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
-					$.getJSON(url, function (data) {
+							xaxis : {
+								mode : "time",
+								minTickSize : [1, 'minute']
+							},
+							legend : {
+								backgroundOpacity : 0
+							},
+							shadowSize : 2
+						};
 
-						var plotarea = $("#graph" + devicecmd.id);
-
-						if (devicecmd.type == 21 || devicecmd.type == 121) {
-							Steps = true;
+						if (devicecmd.type == 120 || devicecmd.type == 121) {
+							url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
 						} else {
-							Steps = false;
+							url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
 						}
 
-						$.plot(plotarea, [{
-									label : devicecmd.webapp_par1,
-									data : data,
-									color : devicecmd.webapp_par2,
-									lines : {
-										lineWidth : 1,
-										steps : Steps,
-										fill : true,
-										zero : false,
-										fillColor : {
-											colors : [{
-													opacity : 0.1
-												}, {
-													opacity : 1
-												}
-											]
-										}
-									}
+						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
+						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
+
+						$.ajax({
+							url : url,
+							dataType : "json",
+							beforeSend : function (xhr) {
+
+								var user = decodeURIComponent(getCookie("USERID"));
+								var password = decodeURIComponent(getCookie("TOKEN"));
+								var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+								var base64 = CryptoJS.enc.Base64.stringify(words);
+
+								xhr.setRequestHeader("Authorization", "Basic " + base64);
+							},
+							error : function (xhr, ajaxOptions, thrownError) {
+								if (xhr.status == 403) {
+									$.mobile.changePage("#login_page", {
+										transition : "none"
+									});
+									
 								}
-							], options);
+							},
+							success : function (data) {
 
-					});
+								var plotarea = $("#graph" + devicecmd.id);
 
-				} else if (devicecmd.type == 30 || devicecmd.type == 130) { //bar graph day totals
-
-					var options = {
-						xaxis : {
-							mode : "time",
-							minTickSize : [1, 'minute']
-						},
-						legend : {
-							backgroundOpacity : 0
-						},
-						shadowSize : 3
-					};
-					ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
-					ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
-					$.getJSON('api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type, function (data) {
-
-						var plotarea = $("#graph" + devicecmd.id);
-
-						$.plot(plotarea, [{
-									label : devicecmd.webapp_par1,
-									data : data,
-									color : devicecmd.webapp_par2,
-									bars : {
-										show : true,
-										barWidth : 43200000,
-										align : "center",
-										lineWidth : 0,
-										fillColor : {
-											colors : [{
-													opacity : 0.8
-												}, {
-													opacity : 0.3
-												}
-											]
-										}
-									}
+								if (devicecmd.type == 21 || devicecmd.type == 121) {
+									Steps = true;
+								} else {
+									Steps = false;
 								}
-							], options);
 
-					});
+								$.plot(plotarea, [{
+											label : devicecmd.webapp_par1,
+											data : data,
+											color : devicecmd.webapp_par2,
+											lines : {
+												lineWidth : 1,
+												steps : Steps,
+												fill : true,
+												zero : false,
+												fillColor : {
+													colors : [{
+															opacity : 0.1
+														}, {
+															opacity : 1
+														}
+													]
+												}
+											}
+										}
+									], options);
 
-				} else if (devicecmd.type == 31 || devicecmd.type == 131) { //bar graph week totals
+							}
+						});
+
+					} else if (devicecmd.type == 30 || devicecmd.type == 130) { //bar graph day totals
+
+						var options = {
+							xaxis : {
+								mode : "time",
+								minTickSize : [1, 'minute']
+							},
+							legend : {
+								backgroundOpacity : 0
+							},
+							shadowSize : 3
+						};
+						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
+						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
+
+						$.ajax({
+							url : 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type,
+							dataType : "json",
+							beforeSend : function (xhr) {
+
+								var user = decodeURIComponent(getCookie("USERID"));
+								var password = decodeURIComponent(getCookie("TOKEN"));
+								var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+								var base64 = CryptoJS.enc.Base64.stringify(words);
+
+								xhr.setRequestHeader("Authorization", "Basic " + base64);
+							},
+							error : function (xhr, ajaxOptions, thrownError) {
+								if (xhr.status == 403) {
+									$.mobile.changePage("#login_page", {
+										transition : "none"
+									});
+									//$('#popupLogin').popup();
+									//$('#popupLogin').popup("open");
+								}
+							},
+							success : function (data) {
+
+								var plotarea = $("#graph" + devicecmd.id);
+
+								$.plot(plotarea, [{
+											label : devicecmd.webapp_par1,
+											data : data,
+											color : devicecmd.webapp_par2,
+											bars : {
+												show : true,
+												barWidth : 43200000,
+												align : "center",
+												lineWidth : 0,
+												fillColor : {
+													colors : [{
+															opacity : 0.8
+														}, {
+															opacity : 0.3
+														}
+													]
+												}
+											}
+										}
+									], options);
+
+							}
+						});
+
+					} else if (devicecmd.type == 31 || devicecmd.type == 131) { //bar graph week totals
 
 
-					var options = {
-						
-						
-						xaxis : {
-							mode : null,
-							tickLength : 0,
-							minTickSize : 1,
-							tickDecimals : 0
-						},
-						legend : {
-							backgroundOpacity : 0
-						},
-						shadowSize : 3,
+						var options = {
 
-					};
-					console.log(devicecmd.type);
-					if (devicecmd.type == 131) {
-						url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
-					} else {
-						url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
+							xaxis : {
+								mode : null,
+								tickLength : 0,
+								minTickSize : 1,
+								tickDecimals : 0
+							},
+							legend : {
+								backgroundOpacity : 0
+							},
+							shadowSize : 3,
+
+						};
+						console.log(devicecmd.type);
+						if (devicecmd.type == 131) {
+							url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
+						} else {
+							url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
+						}
+
+						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
+						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
+
+						$.ajax({
+							url : url,
+							dataType : "json",
+							beforeSend : function (xhr) {
+
+								var user = decodeURIComponent(getCookie("USERID"));
+								var password = decodeURIComponent(getCookie("TOKEN"));
+								var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+								var base64 = CryptoJS.enc.Base64.stringify(words);
+
+								xhr.setRequestHeader("Authorization", "Basic " + base64);
+							},
+							error : function (xhr, ajaxOptions, thrownError) {
+								if (xhr.status == 403) {
+									$.mobile.changePage("#login_page", {
+										transition : "none"
+									});
+								
+								}
+							},
+							success : function (data) {
+
+								var plotarea = $("#graph" + devicecmd.id);
+
+								$.plot(plotarea, [{
+											label : devicecmd.webapp_par1,
+											data : data,
+											color : devicecmd.webapp_par2,
+											bars : {
+												show : true,
+												barWidth : 0.8,
+												order : 1,
+												align : "center",
+												lineWidth : 0,
+												fillColor : {
+													colors : [{
+															opacity : 0.8
+														}, {
+															opacity : 0.3
+														}
+													]
+												}
+											}
+										}
+									], options);
+
+							}
+						});
+
+					} else if (devicecmd.type == 32 || devicecmd.type == 132) { //bar graph month totals
+
+						var options = {
+							xaxis : {
+								mode : "time",
+								minTickSize : [1, 'month'],
+								timeformat : "%b"
+							},
+							legend : {
+								backgroundOpacity : 0
+							},
+							shadowSize : 3
+						};
+						console.log(devicecmd.type);
+						if (devicecmd.type == 132) {
+							url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
+						} else {
+							url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
+						}
+
+						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
+						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
+
+						$.ajax({
+							url : url,
+							dataType : "json",
+							beforeSend : function (xhr) {
+
+								var user = decodeURIComponent(getCookie("USERID"));
+								var password = decodeURIComponent(getCookie("TOKEN"));
+								var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+								var base64 = CryptoJS.enc.Base64.stringify(words);
+
+								xhr.setRequestHeader("Authorization", "Basic " + base64);
+							},
+							error : function (xhr, ajaxOptions, thrownError) {
+								if (xhr.status == 403) {
+									$.mobile.changePage("#login_page", {
+										transition : "none"
+									});
+								
+								}
+							},
+							success : function (data) {
+
+								var plotarea = $("#graph" + devicecmd.id);
+
+								$.plot(plotarea, [{
+											label : devicecmd.webapp_par1,
+											data : data,
+											color : devicecmd.webapp_par2,
+											bars : {
+												show : true,
+												barWidth : 1000 * 60 * 60 * 24 * 15,
+												align : "center",
+												lineWidth : 0,
+												fillColor : {
+													colors : [{
+															opacity : 0.8
+														}, {
+															opacity : 0.3
+														}
+													]
+												}
+											}
+										}
+									], options);
+
+							}
+						});
+
 					}
 
-					ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
-					ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
-					$.getJSON(url, function (data) {
+				});
 
-						var plotarea = $("#graph" + devicecmd.id);
+				$.mobile.changePage("#graph_page", {
+					transition : "none"
+				});
+				$('#graph').append(ValueHtml);
+				$('#graph').trigger('create');
 
-						$.plot(plotarea, [{
-									label : devicecmd.webapp_par1,
-									data : data,
-									color : devicecmd.webapp_par2,
-									bars : {
-										show : true,
-										barWidth : 0.8,
-										order : 1,
-										align : "center",
-										lineWidth : 0,
-										fillColor : {
-											colors : [{
-													opacity : 0.8
-												}, {
-													opacity : 0.3
-												}
-											]
-										}
-									}
-								}
-							], options);
-
-					});
-
-				} else if (devicecmd.type == 32 || devicecmd.type == 132) { //bar graph month totals
-
-					var options = {
-						xaxis : {
-							mode : "time",
-							minTickSize : [1, 'month'],
-							timeformat : "%b"
-						},
-						legend : {
-							backgroundOpacity : 0
-						},
-						shadowSize : 3
-					};
-					console.log(devicecmd.type);
-					if (devicecmd.type == 132) {
-						url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
-					} else {
-						url = 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
-					}
-
-					ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
-					ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
-					$.getJSON(url, function (data) {
-
-						var plotarea = $("#graph" + devicecmd.id);
-
-						$.plot(plotarea, [{
-									label : devicecmd.webapp_par1,
-									data : data,
-									color : devicecmd.webapp_par2,
-									bars : {
-										show : true,
-										barWidth : 1000 * 60 * 60 * 24 * 15,
-										align : "center",
-										lineWidth : 0,
-										fillColor : {
-											colors : [{
-													opacity : 0.8
-												}, {
-													opacity : 0.3
-												}
-											]
-										}
-									}
-								}
-							], options);
-
-					});
-
-				}
-
-			});
-
-			$.mobile.changePage("#graph_page", {
-				transition : "none"
-			});
-			$('#graph').append(ValueHtml);
-			$('#graph').trigger('create');
+			}
 
 		}
-
 	});
-
-	//$.mobile.loading( "show");
 
 }
 
 function OpenAlarmPanel(index) {
 	DeviceIndex = index;
 
-	//$.mobile.loading( "show");
-	$.getJSON('api/devicecmds/' + ArrDeviceID[DeviceIndex], function (data) {
+	$.ajax({
+		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
+		dataType : "json",
+		beforeSend : function (xhr) {
 
-		devicecmds = data.devicecmds;
-		var nrofdevicecmds = (data.devicecmds.length);
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		if (data.devicecmds != '') {
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+				
+			}
+		},
+		success : function (data) {
 
-			$.each(devicecmds, function (index, devicecmd) {
+			devicecmds = data.devicecmds;
+			var nrofdevicecmds = (data.devicecmds.length);
 
-				if (devicecmd.type == 11) {
+			if (data.devicecmds != '') {
 
-					editAlarm(devicecmd.webapp_par1);
+				$.each(devicecmds, function (index, devicecmd) {
 
-				}
+					if (devicecmd.type == 11) {
 
-			});
+						editAlarm(devicecmd.webapp_par1);
+
+					}
+
+				});
+
+			}
 
 		}
-
-		//$.mobile.loading( "hide");
-
-
 	});
+
 }
 
 function send_event(event, type, sync) {
 
-	$.post("api/cmdsend/" + event, function (data) {
+	$.ajax({
+		type : 'POST',
+		contentType : 'text/plain',
+		url : 'api/cmdsend/' + event,
+		dataType : "text",
+		beforeSend : function (xhr) {
 
-		clearTimeout(StateTimer);
-		killDeviceCmdTimerIntervals();
+			var user = decodeURIComponent(getCookie("USERID"));
+			var password = decodeURIComponent(getCookie("TOKEN"));
+			var words = CryptoJS.enc.Utf8.parse(user + ":" + password);
+			var base64 = CryptoJS.enc.Base64.stringify(words);
 
-		$("#devices_extra_panel_content_error").empty();
-		data = data.toLowerCase();
-		event = event.toLowerCase();
-		var arrEvent = event.split(";");
+			xhr.setRequestHeader("Authorization", "Basic " + base64);
+		},
+		error : function (xhr, ajaxOptions, thrownError) {
+			if (xhr.status == 403) {
+				$.mobile.changePage("#login_page", {
+					transition : "none"
+				});
+			
+			}
+		},
+		success : function (data) {
 
-		if (event.indexOf('sendto') == -1 && event.indexOf('fileexecute') == -1) { //sendto geeft (nog) geen response
+			//console.log(data);
+			clearTimeout(StateTimer);
+			killDeviceCmdTimerIntervals();
 
-			arrEvent.forEach(function (s) {
-				event = s.trim();
+			$("#devices_extra_panel_content_error").empty();
+			data = data.toLowerCase();
+			event = event.toLowerCase();
+			var arrEvent = event.split(";");
 
-				if (data.indexOf('event=' + event) == -1) {
+			if (event.indexOf('sendto') == -1 && event.indexOf('fileexecute') == -1) { //sendto geeft (nog) geen response
 
-					if (data.indexOf('???') == -1) {
+				arrEvent.forEach(function (s) {
+					event = s.trim();
 
-						//alert('Error sending command ' + event + ' to Nodo!!');
-						$("#devices_extra_panel_content_error").append('<br><small><b>Error sending command ' + event + '</b></small>');
+					if (data.indexOf('event=' + event) == -1) {
 
+						if (data.indexOf('???') == -1) {
+
+							//alert('Error sending command ' + event + ' to Nodo!!');
+							$("#devices_extra_panel_content_error").append('<br><small><b>Error sending command ' + event + '</b></small>');
+
+						} else {
+							//alert(event + ' is not a valid nodo command !!');
+							$("#devices_extra_panel_content_error").append('<br><small><b>' + event + ' is not a valid nodo command !!</b></small>');
+
+						}
 					} else {
-						//alert(event + ' is not a valid nodo command !!');
-						$("#devices_extra_panel_content_error").append('<br><small><b>' + event + ' is not a valid nodo command !!</b></small>');
-
+						console.log('Command ' + event + ' received by Nodo!');
+						setTimeout(function () {
+							Device_State()
+						}, 500);
 					}
-				} else {
-					console.log('Command ' + event + ' received by Nodo!');
-					setTimeout(function () {
-						Device_State()
-					}, 500);
-				}
 
-			});
+				});
+
+			}
+
+			StateTimer = setTimeout(function () {
+
+					DeviceCmdTimerArr.push(setInterval(function () {
+							update_cmd_state(ArrDeviceID[DeviceIndex]);
+						}, 2000));
+				}, 500);
 
 		}
-
-	}).done(function () {
-
-		clearTimeout(StateTimer);
-		killDeviceCmdTimerIntervals();
-
-		StateTimer = setTimeout(function () {
-
-				DeviceCmdTimerArr.push(setInterval(function () {
-						update_cmd_state(ArrDeviceID[DeviceIndex]);
-					}, 2000));
-			}, 500);
 	});
+
 }
-
-
-	
-

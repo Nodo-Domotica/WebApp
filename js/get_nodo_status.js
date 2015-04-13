@@ -17,43 +17,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function Get_Nodo_Status()
  {  
+ 
+ var	element = document.getElementById('status_div');
+ 
+ $.ajax({
+                type: 'GET',
+                contentType: 'text/plain',
+                url: '../api/nodostatus',
+                dataType: "text",
+               	beforeSend : function(xhr) {
+					
+				
+					
+				element.innerHTML = '<h4><img src="media/loading.gif"/> Please wait, loading status...</h4>'; 
+			 
+				var user = decodeURIComponent(getCookie("USERID"));
+				var password = decodeURIComponent(getCookie("TOKEN"));
+			 	var words  = CryptoJS.enc.Utf8.parse(user + ":" + password);
+				var base64 = CryptoJS.enc.Base64.stringify(words);
+                
+				xhr.setRequestHeader("Authorization", "Basic " + base64);
+	            },
+				error : function(xhr, ajaxOptions, thrownError) {
+				
+				
+				if (xhr.status==403) { 
+					$.mobile.loading( "hide");
+					//$('#popupLogin').popup();
+					$('#popupLogin').popup("open");
+					
+				}
+				},
+                success: function(data, textStatus, jqXHR){
+                  element.innerHTML = data;  
+                }
+        });
    
 			
-				var
-					$http,
-					$self = arguments.callee,
-					element = document.getElementById('status_div');
-					
-					element.innerHTML = '<h4><img src="media/loading.gif"/> Please wait, loading status...</h4>'; 
-					
-				if (window.XMLHttpRequest) {
-					$http = new XMLHttpRequest();
-				} else if (window.ActiveXObject) {
-					try {
-						$http = new ActiveXObject('Msxml2.XMLHTTP');
-					} catch(e) {
-						$http = new ActiveXObject('Microsoft.XMLHTTP');
-					}
-				}
+				
 
-				if ($http) {
-					$http.onreadystatechange = function()
-					{
-						if (/4|^complete$/.test($http.readyState)) {
-														
-							element.innerHTML = $http.responseText;  
-						}
-					};
-					$http.open('GET', 'api/nodostatus' + '?' + new Date().getTime(), true);
-					$http.send(null);
-				}
-
-			}
-
-
-
-
- 
-
-
- 
+}

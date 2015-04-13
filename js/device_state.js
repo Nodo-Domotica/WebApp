@@ -1,18 +1,37 @@
 var ArrayDeviceDimvalue=new Array();
 function Device_State(){
 
-var url='api/devicestate';
+
 
 
 
 var status;
 
-	
-		$.getJSON(url,function(data){
-			
+$.ajax({ 
+         async: false,
+		 url: 'api/devicestate', 
+         dataType: "json",
+		 beforeSend : function(xhr) {
+			 
+				var user = decodeURIComponent(getCookie("USERID"));
+				var password = decodeURIComponent(getCookie("TOKEN"));
+			 	var words  = CryptoJS.enc.Utf8.parse(user + ":" + password);
+				var base64 = CryptoJS.enc.Base64.stringify(words);
+                
+				xhr.setRequestHeader("Authorization", "Basic " + base64);
+	            },
+				error : function(xhr, ajaxOptions, thrownError) {
+				if (xhr.status==403) { 
+					$.mobile.loading( "hide");
+					
+				}
+				},
+         success: function(data) {
+ 			
 			if (data != null) {
 				$.each(data, function(i,data){
-				
+					
+									
 					indicator_text = data.indicator_text;
 
 					// The array of regex patterns to look for
@@ -72,6 +91,13 @@ var status;
 					}			   
 				});
 			}
-		});
+			
+			
+			
+	}	
+});
+
+	
+	
 
 }

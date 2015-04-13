@@ -17,7 +17,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -110,7 +110,7 @@ function getNotifications() {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/notifications',
+		url : '../api/notifications',
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 
@@ -192,7 +192,7 @@ function DeleteNotification(id) {
 
 $.ajax({
         type: 'DELETE',
-        url: '../api2/notifications/' + id,
+        url: '../api/notifications/' + id,
 		beforeSend : function(xhr) {
 			 
 				var user = decodeURIComponent(getCookie("USERID"));
@@ -241,7 +241,7 @@ function findNotification(id) {
        $.mobile.loading( "show");
         $.ajax({
                 type: 'GET',
-                url: '../api2/notifications/' + id,
+                url: '../api/notifications/' + id,
                 dataType: "json",
 				beforeSend : function(xhr) {
 			 
@@ -281,7 +281,7 @@ function addNotification() {
         $.ajax({
                 type: 'POST',
                 contentType: 'application/json',
-                url: '../api2/notifications',
+                url: '../api/notifications',
                 dataType: "json",
                 data: formToJSON(),
 				beforeSend : function(xhr) {
@@ -318,7 +318,7 @@ function editNotification(id) {
         $.ajax({
                 type: 'PUT',
                 contentType: 'application/json',
-                url: '../api2/notifications/' + id,
+                url: '../api/notifications/' + id,
                 dataType: "json",
                 data: formToJSON(),
 				beforeSend : function(xhr) {
@@ -364,7 +364,7 @@ function renderDetails(notification) {
 	$.ajax({
 		type : 'GET',
 		contentType : 'application/json',
-		url : '../api2/nodostrustingyou',
+		url : '../api/nodostrustingyou',
 		dataType : "json",
 		beforeSend : function(xhr) {
 			 

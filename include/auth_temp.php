@@ -40,12 +40,12 @@ require_once('../settings.php');
 		
 	}
 	else {	
-	die('You need to be logged in!!!');
+	die();
 	//header("Location: ../");
 	}
 }
 	else {	
-	die('You need to be logged in!!!');
+	die();
 	//header("Location: ../");
 	}
 

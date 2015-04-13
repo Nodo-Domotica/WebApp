@@ -1,7 +1,7 @@
 
 
 $('#setup_connection_page').on('pageinit', function(event) {
-	checkSession();
+	//checkSession();
 	getConnectionSettings();
 	
 });
@@ -9,6 +9,7 @@ $('#setup_connection_page').on('pageinit', function(event) {
 function getConnectionSettings() {
 	$.getJSON('json_setup_connection.php', function(data) {
 		connection = data.connection;
+		
 		
 		$.each(connection, function(index, connectionsetting) {
 			
@@ -28,7 +29,7 @@ function getConnectionSettings() {
 			
 		});
 			
-	});
+	}).error(function() { alert("Please login!"); });
 }
 
 
@@ -85,7 +86,7 @@ $('#setup_connection_page').on('pageshow', function(event) {
 	
 	pagetitle='Setup: Communication';
 	
-	checkSession();
+	//checkSession();
     $('#header_setup_communication').append('<div id="nodostate">'+pagetitle+'</div>');
 	Nodo_State();
 	

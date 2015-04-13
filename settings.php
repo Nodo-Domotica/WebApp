@@ -22,16 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $DEFAULT_NODO_PWD = "Nodo";
 $DEFAULT_NODO_ID = "";
 $WEBAPP_HOST = "webapp.nodo-domotica.nl";
-$NODO_URL = "webapp.nodo-domotica.nl/nodo.php"; //waar bevind zich nodo.php dit pad zal in de Nodo worden geplaats bij een auto config vanuit de webapp
-$MYSQLHOST = 'localhost'; //MYSQL Host
+$NODO_URL = "www.nodo-domotica.nl/webapp/new/nodo.php"; //waar bevind zich nodo.php
+$MYSQLHOST = 'localhost'; 
 $DBNAME = 'nododom_webappdb'; //Database naam
-$MYSQLUSER = 'nododom_webadbu'; //MYSQL gebruiker
-$MYSQLPWD = 'XXXXXX'; //MYSQL Wachtwoord
+$MYSQLUSER = 'XXXX'; //Mysql Gebruiker.
+$MYSQLPWD = 'XXXX'; //Mysql Wachtwoord.
 
 //$salt word gebruikt om er voor te zorgen dat ook slecht gekozen wachtwoorden zoals 1234, abc sterk worden gehashed
-$salt = "wwzS!$3)rk^KvSMu";
+$salt = "XXXX"; //Random key
 
 //SQL injection prevention
+//$_POST = array_map("mysql_real_escape_string", $_POST);
 $_GET = array_map("mysql_real_escape_string", $_GET);
 $_REQUEST = array_map("mysql_real_escape_string", $_REQUEST);
 

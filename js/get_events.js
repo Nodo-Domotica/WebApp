@@ -17,10 +17,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 function Get_Nodo_Events()
  {  
-   
-			 $.getJSON('api/events/100', function(data) {   
-		 
-		events = data.events;
+ 
+ 
+ $.ajax({ 
+         url: 'api/events/100', 
+         dataType: "json",
+		 beforeSend : function(xhr) {
+			 
+				var user = decodeURIComponent(getCookie("USERID"));
+				var password = decodeURIComponent(getCookie("TOKEN"));
+			 	var words  = CryptoJS.enc.Utf8.parse(user + ":" + password);
+				var base64 = CryptoJS.enc.Base64.stringify(words);
+                
+				xhr.setRequestHeader("Authorization", "Basic " + base64);
+	            },
+				error : function(xhr, ajaxOptions, thrownError) {
+				if (xhr.status==403) { 
+					$.mobile.changePage( "#login_page", { transition: "none"} );
+					//$('#popupLogin').popup();
+					//$('#popupLogin').popup("open");
+				}
+				},
+         success: function(data) {
+ 			
+			events = data.events;
 		
         $('#events_div').empty();
 		
@@ -60,8 +80,13 @@ function Get_Nodo_Events()
         $('#events_div').append(html);
 		
 	
+			
+			
+			
+	}	
+});
+   
 		
-    });
 }
 
 			

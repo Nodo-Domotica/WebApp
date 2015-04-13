@@ -8,8 +8,8 @@ $('#login_form').on('submit', function () {
         
 		if (response.authorized > 0) {
 		
-			//$.mobile.changePage('webapp.html', {transition: 'none',reloadPage: true});
-			document.location.href = 'webapp.html'
+			//$.mobile.changePage('', {transition: 'none',reloadPage: true});
+			document.location.href = ''
 			
         } else {
             
@@ -34,7 +34,7 @@ $("#logon_page").on("pageinit", function() {
 				
 				jQuery(document).empty();
 				
-				document.location.href = 'webapp.html'
+				document.location.href = ''
 				
 				
 				

@@ -66,7 +66,7 @@ $('#btnSignin').click(function () {
 
 	$.ajax({
 		type : "POST",
-		url : "/api2/login",
+		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		data : JSON.stringify({
@@ -124,7 +124,7 @@ function findGroup(id) {
 	$.mobile.loading("show");
 	$.ajax({
 		type : 'GET',
-		url : '../api2/groups/' + id,
+		url : '../api/groups/' + id,
 		dataType : "json",
 		beforeSend : function (xhr) {
 
@@ -163,7 +163,7 @@ function addGroup() {
 	$.ajax({
 		type : 'POST',
 		contentType : 'application/json',
-		url : '../api2/groups',
+		url : '../api/groups',
 		dataType : "json",
 		data : formToJSONGroups(),
 		beforeSend : function (xhr) {
@@ -200,7 +200,7 @@ function editGroup(id) {
 	$.ajax({
 		type : 'PUT',
 		contentType : 'application/json',
-		url : '../api2/groups/' + id,
+		url : '../api/groups/' + id,
 		dataType : "json",
 		data : formToJSONGroups(),
 		beforeSend : function (xhr) {
@@ -260,7 +260,7 @@ function DeleteGroup(id) {
 
 	$.ajax({
 		type : 'DELETE',
-		url : '../api2/groups/' + id,
+		url : '../api/groups/' + id,
 		beforeSend : function (xhr) {
 
 			var user = decodeURIComponent(getCookie("USERID"));
@@ -315,7 +315,7 @@ function getGroups() {
 
 	$.ajax({
 		type : 'GET',
-		url : '../api2/groups',
+		url : '../api/groups',
 		dataType : "json",
 		beforeSend : function (xhr) {
 

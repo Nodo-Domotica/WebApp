@@ -176,7 +176,7 @@ if ($userId > 0 && $key_match == 1) {
         $stmt->bindParam(':file', $file);
         $stmt->execute();
         $row           = $stmt->fetch(PDO::FETCH_ASSOC);
-        $row           = mysql_fetch_array($result);
+       
         //	echo $row['script'];
         //	echo "\n";
         $outputContent = $row['script'] . "\n";

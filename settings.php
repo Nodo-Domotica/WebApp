@@ -16,6 +16,10 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
+
+
+
+
 $NODO_URL = "webapp.nodo-domotica.nl/nodo.php"; //Deze waarde zal in de Nodo onder HTTPhost worden gezet bij een auto config
 $MYSQLHOST = 'localhost';
 $DBNAME = 'nododom_webappdb';
@@ -23,7 +27,8 @@ $MYSQLUSER = 'User';
 $MYSQLPWD = 'Password';
 
 //$salt word gebruikt om er voor te zorgen dat ook slecht gekozen wachtwoorden zoals 1234, abc sterk worden gehashed
-//Let op indien je deze waarde aanpast werkt het standaard wachtwoord niet meer!
-$salt = "3OvxO0Qi594v10bhu6DC3g2XG3ZozJsH"; 
+$salt = "3OvxO0Qi594v10bhu6DC3g2XG3ZozJsH"; //Let op indien je deze aanpast werkt het standaard wachtwoord niet meer!
+
+
 
 ?>

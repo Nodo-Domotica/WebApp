@@ -145,7 +145,7 @@ END Generate NoDo ID
 	 $subject = "Confirm your Nodo WebApp account";
 	 $message="Dear $first_name $last_name, \r\n\r\n";
 	 $message.="Before you can use Nodo software and the WebApp and hosting service, you must accept the licence agreement and activate your account by clicking the following link:\r\n";
-     $message.="http://$WEBAPP_HOST/confirmation.php?passkey=$confirm_code\r\n";
+     $message.="confirmation.php?passkey=$confirm_code\r\n";
 	 $message.="\r\n";
 	 $message.="After confirmation you can login at http://www.nodo-domotica.nl/webapp with these login data:\r\n\r\n";
 	 $message.="Username: $email\r\n";

@@ -1,0 +1,2 @@
+#Tijdelijk json_setup_connections.php bevat deprecated items maar gaat in zijn geheel vervallen
+php_flag display_errors off

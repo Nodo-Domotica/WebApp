@@ -37,7 +37,7 @@ if (isset($_GET['passkey']) && $_GET['passkey'] != null ) {
 			mysql_select_db($database, $db);
 			mysql_query("UPDATE nodo_tbl_users SET active='1',confirm_code='' WHERE id='$id'") or die(mysql_error());
 			$message = "You account is confirmed<br \>";
-			$message.= "Click <a href=\"http://$WEBAPP_HOST/\">here</a> to login";
+			$message.= "Click <a href=\"index.html\">here</a> to login";
 		}
 		else {
 			

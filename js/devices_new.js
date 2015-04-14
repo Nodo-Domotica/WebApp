@@ -373,7 +373,9 @@ function getGroups() {
 			}
 		},
 		success : function (data) {
-
+			
+			$('#devicegrouppopuplist').empty();
+			
 			if (data.groups != null) {
 
 				groups = data.groups;

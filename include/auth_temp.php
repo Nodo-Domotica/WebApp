@@ -16,16 +16,18 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
-require_once('../settings.php');
     
 	if (isset($_COOKIE['TOKEN']) && isset($_COOKIE['USERID'])) {
 
-	$token = mysql_real_escape_string($_COOKIE['TOKEN']);
-	$userid = mysql_real_escape_string($_COOKIE['USERID']);
+	$token = $_COOKIE['TOKEN'];
+	$userid = $_COOKIE['USERID'];
 	
-	mysql_select_db($database, $db);
-	$result = mysql_query("SELECT * FROM nodo_tbl_tokens WHERE user_id='$userid' AND token='$token'") or die(mysql_error());  
-	$row = mysql_fetch_array($result);
+	$stmt = db()->prepare("SELECT * FROM nodo_tbl_tokens WHERE user_id=:userId AND token=:token");
+	$stmt->bindValue(':userId', $userid, PDO::PARAM_INT);
+	$stmt->bindParam(':token', $token);
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	
 	$id = $row['user_id'];
 	//$active = $row['active'];
 	//$default_page = $row['default_page'];

@@ -15,8 +15,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
-require_once('../settings.php');
-require_once('../connections/db_connection.php'); 
+require_once('../settings.php'); 
+require_once('../api/pdo_db_connection.php');
 require_once('../include/auth_temp.php');
 require_once('../include/user_settings.php');
 
@@ -124,10 +124,10 @@ function get_phrase_after_string($haystack,$needle)
 if (isset($_POST['nodo_id'])) {  
  
  
- $nodo_ip = mysql_real_escape_string(htmlspecialchars($_POST['nodo_ip'])); 
- $nodo_port = mysql_real_escape_string(htmlspecialchars($_POST['nodo_port']));  
- $send_method = mysql_real_escape_string(htmlspecialchars($_POST['send_method']));
- $nodo_password = mysql_real_escape_string(htmlspecialchars($_POST['nodo_password']));
+ $nodo_ip = htmlspecialchars($_POST['nodo_ip']); 
+ $nodo_port = htmlspecialchars($_POST['nodo_port']);  
+ $send_method = htmlspecialchars($_POST['send_method']);
+ $nodo_password = htmlspecialchars($_POST['nodo_password']);
  
 
 	//Connectie controleren.. optie om de Nodo automatisch te configureren
@@ -227,9 +227,15 @@ if ($http_status == '403' && strpos($headers['Server'], 'Nodo/') !== false) {
 }
   
 	 //Gegevens opslaan in de database
-	 mysql_select_db($database, $db);
-	 mysql_query("UPDATE nodo_tbl_users SET nodo_ip='$nodo_ip', nodo_port='$nodo_port', send_method='$send_method', nodo_password='$nodo_password' WHERE id='$userId'") or die(mysql_error());   
+	
 	 
+	$stmt = db()->prepare("UPDATE nodo_tbl_users SET nodo_ip=:nodo_ip, nodo_port=:nodo_port, send_method=:send_method, nodo_password=:nodo_password WHERE id=:userId");
+	$stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+	$stmt->bindParam(":nodo_ip", $nodo_ip);
+	$stmt->bindParam(":nodo_port", $nodo_port);
+	$stmt->bindParam(":send_method", $send_method);
+	$stmt->bindParam(":nodo_password", $nodo_password);
+	$stmt->execute();
 	 
 		$rowsarray[] = array(
 		
@@ -244,9 +250,10 @@ if ($http_status == '403' && strpos($headers['Server'], 'Nodo/') !== false) {
 }
 else {
 
-	mysql_select_db($database, $db);
-	$result = mysql_query("SELECT * FROM nodo_tbl_users WHERE id='$userId'") or die(mysql_error());  
-	$row = mysql_fetch_array($result);
+	$stmt = db()->prepare("SELECT * FROM nodo_tbl_users WHERE id=:userId");
+	$stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+	$stmt->execute();
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
 	//Indien er al een IP-adres in de database bekend is gebruiken we deze.

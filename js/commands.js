@@ -36,7 +36,7 @@ $('#command_page').on('pageshow', function(event) {
 	pagetitle = 'Commands';
 	$('#header_command').append('<div id="nodostate">'+pagetitle+'</div>');
 	Nodo_State();
-	checkSession();
+	
 	
 	
 });

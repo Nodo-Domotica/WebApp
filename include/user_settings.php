@@ -16,11 +16,11 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
+$stmt = db()->prepare("SELECT * FROM nodo_tbl_users WHERE id=:userId");
+$stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+$stmt->execute();
+$row_RSsetup = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//Lees setup waarden uit de database
-mysql_select_db($database, $db);
-$RS_setup = mysql_query("SELECT * FROM nodo_tbl_users WHERE id='$userId'") or die(mysql_error());  
-$row_RSsetup = mysql_fetch_array($RS_setup);
 
 if($row_RSsetup['webapp_theme'] == "") {$theme = "a";} else {$theme = $row_RSsetup['webapp_theme'];}
 if($row_RSsetup['webapp_theme_header'] == "") {$theme_header = "a";} else {$theme_header = $row_RSsetup['webapp_theme_header'];}

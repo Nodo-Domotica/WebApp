@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	</div><!-- /header -->
 
 	<div data-role="content">	
-		<p>Your Nodo WebApp account is created.</p>		
+		<p>Your Nodo Web App account is created.</p>		
 		<p>Login details and a confirmation link are sent to your email address.</p>	
 				
 		

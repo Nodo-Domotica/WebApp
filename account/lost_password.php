@@ -16,21 +16,23 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
-require_once('settings.php');
-require_once('connections/db_connection.php');
+require_once('../settings.php');
+require_once('../api/pdo_db_connection.php');
 
-
+$error_message='';
 
 if (isset($_POST['submit'])) 
 {
 
 
-			$email = mysql_real_escape_string(htmlspecialchars($_POST['email'])); 
+			$email = htmlspecialchars($_POST['email']); 
+			
+			$stmt = db()->prepare("SELECT id,user_login_name FROM nodo_tbl_users WHERE user_login_name=:email");
+			$stmt->bindParam(':email', $email);
+			$stmt->execute();
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-			mysql_select_db($database, $db);
-			$result = mysql_query("SELECT id,user_login_name FROM nodo_tbl_users WHERE user_login_name='$email'") or die(mysql_error());  
-			$row = mysql_fetch_array($result);
-
+			
 			$id = $row['id'];
 				
 				//Als we een record terug krijgen dat is er een account met het ingevulde e-mail adres
@@ -59,14 +61,18 @@ if (isset($_POST['submit']))
 					$password_encoded = md5($salt.$password);
 					
 					
-					//Gegevens in de database opslaan
-					mysql_select_db($database, $db);
-					mysql_query("UPDATE nodo_tbl_users SET user_password='$password_encoded' WHERE id='$id'") or die(mysql_error());
 					
+					//Gegevens in de database opslaan
+					 $stmt = db()->prepare("UPDATE nodo_tbl_users SET user_password=:password_encoded WHERE id=:id");
+					 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+					 $stmt->bindParam(':password_encoded', $password_encoded);
+					 $stmt->execute();
+					
+										
 					//Verificatie e-mail sturen.
 					 $to = $email;
-					 $subject = "New password for your Nodo WebApp account";
-					 $message="Your Nodo WebApp login details \r\n";
+					 $subject = "New password for your Nodo Web App account";
+					 $message="Your Nodo Web App login details \r\n";
 					 $message.="Username: $email\r\n";
 					 $message.="Password: $password\r\n";
 					 $from = "webapp@nodo-domotica.nl";
@@ -99,14 +105,14 @@ if (isset($_POST['submit']))
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"> 
 	<title>Nodo Web App</title> 
-	<link rel="stylesheet" href="themes/webapp.min.css" />
-	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
 	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
-	<script src="js/jq/jquery-1.11.1.min.js"></script>
-	<script src="js/jqm/jquery.mobile-1.4.5.min.js"></script>
-	<link rel="icon" type="image/vnd.microsoft.icon" href="media/logo.ico" />
-	<link rel="shortcut icon" href="media/logo.ico" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
 </head> 
 
 <body> 
@@ -117,7 +123,7 @@ if (isset($_POST['submit']))
 		<h1>Reset your password.</h1>
 		<div data-role="navbar" data-iconpos="top">
 		<ul>
-			<li><a href="index.html" data-icon="star"  data-ajax="false">Login</a></li>
+			<li><a href="../index.html" data-icon="star"  data-ajax="false">Login</a></li>
 		</ul>
 	</div>
 	</div><!-- /header -->

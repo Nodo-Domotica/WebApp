@@ -15,23 +15,32 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
-require_once('settings.php');
-require_once('connections/db_connection.php');
+require_once('../settings.php');
+require_once('../api/pdo_db_connection.php');
 
 
 $message = "";
+$error_message = "";
+$first_name = "";
+$last_name = "";
+$email = "";
+$password = "";
 
 if (isset($_POST['submit'])) 
 {
 
-$first_name = mysql_real_escape_string(htmlspecialchars($_POST['first_name']));
-$last_name = mysql_real_escape_string(htmlspecialchars($_POST['last_name'])); 
-$email = mysql_real_escape_string(htmlspecialchars($_POST['email'])); 
-//$password = mysql_real_escape_string(htmlspecialchars($_POST['password'])); 
+$first_name = htmlspecialchars($_POST['first_name']);
+$last_name = htmlspecialchars($_POST['last_name']); 
+$email = htmlspecialchars($_POST['email']); 
 
-mysql_select_db($database, $db);
-$result = mysql_query("SELECT id,user_login_name FROM nodo_tbl_users WHERE user_login_name='$email'") or die(mysql_error());  
-$row = mysql_fetch_array($result);
+
+
+$stmt = db()->prepare("SELECT id,user_login_name FROM nodo_tbl_users WHERE user_login_name=:email");
+$stmt->bindParam(":email", $email);
+	
+$stmt->execute();
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 $id = $row['id'];
 	
@@ -43,12 +52,11 @@ $id = $row['id'];
 	else
 	
 	{ 
-	
-	/************************************************************************************************
+
+/************************************************************************************************
 Generate NoDo ID													
 *************************************************************************************************/ 
-//Only generate ID when ID in database is empty
-if ($nodo_id == "")  { 
+
    
    
 	//ID Lenght
@@ -83,11 +91,13 @@ if ($nodo_id == "")  {
 
 	
 		//ID generated. Check if ID exists in Database
-		mysql_select_db($database, $db);
-		$result = mysql_query("SELECT 'nodo_id' FROM nodo_tbl_users WHERE nodo_id='$unique_ref'") or die(mysql_error());  
-		$row = mysql_fetch_array($result);
+		$stmt = db()->prepare("SELECT nodo_id FROM nodo_tbl_users WHERE nodo_id=:unique_ref");
+		$stmt->bindParam(":unique_ref", $unique_ref);
+		$stmt->execute();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		
-		if (mysql_num_rows($result)==0) {
+				
+		if ($stmt->rowCount() == 0) {
 
 			//We have a unique ID
 			$unique_ref_found = true;
@@ -98,13 +108,7 @@ if ($nodo_id == "")  {
 	}
 
 $nodo_id = $unique_ref;
- }  
-   
- else{ 
-   
-  $nodo_id = mysql_real_escape_string(htmlspecialchars($_POST['nodo_id'])); 
-  
-}
+
 /************************************************************************************************
 END Generate NoDo ID													
 *************************************************************************************************/ 
@@ -116,7 +120,7 @@ END Generate NoDo ID
 	$confirm_code=md5(uniqid(rand()));
 	
 	//Tijdelijk wachtwoord genereren
-	$password_length = 7;
+	$password_length = 12;
     $possible_chars = "#%*!@&=+1234567890ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz";
 
 	
@@ -133,28 +137,37 @@ END Generate NoDo ID
 
 		}
 		
-		$password_encoded = md5($salt.$password);
+		$password_encoded = md5($SALT.$password);
 	
 	
 	//Gegevens in de database opslaan
-	mysql_select_db($database, $db);
-    mysql_query("INSERT INTO nodo_tbl_users (user_login_name, first_name, last_name, confirm_code, user_password, nodo_id) VALUES ('$email','$first_name','$last_name','$confirm_code','$password_encoded','$nodo_id')") or die(mysql_error());
+	 $stmt = db()->prepare("INSERT INTO nodo_tbl_users (user_login_name, first_name, last_name, confirm_code, user_password, nodo_id) VALUES (:email,:first_name,:last_name,:confirm_code,:password_encoded,:nodo_id)");
+                    $stmt->bindParam(':email', $email);
+                    $stmt->bindParam(':first_name', $first_name);
+					$stmt->bindParam(':last_name', $last_name);
+					$stmt->bindParam(':confirm_code', $confirm_code);
+					$stmt->bindParam(':password_encoded', $password_encoded);
+					$stmt->bindParam(':nodo_id', $nodo_id);
+                    $stmt->execute();
+	
+	
+	
 	
 	//Verificatie e-mail sturen.
 	 $to = $email;
-	 $subject = "Confirm your Nodo WebApp account";
+	 $subject = "Confirm your Nodo Web App account";
 	 $message="Dear $first_name $last_name, \r\n\r\n";
-	 $message.="Before you can use Nodo software and the WebApp and hosting service, you must accept the licence agreement and activate your account by clicking the following link:\r\n";
-     $message.="confirmation.php?passkey=$confirm_code\r\n";
+	 $message.="Before you can use Nodo software and the Nodo Web App, you must accept the licence agreement and activate your account by clicking the following link:\r\n";
+     $message.="$WEBAPP_URL/account/confirmation.php?passkey=$confirm_code\r\n";
 	 $message.="\r\n";
-	 $message.="After confirmation you can login at http://www.nodo-domotica.nl/webapp with these login data:\r\n\r\n";
+	 $message.="After confirmation you can login at $WEBAPP_URL with these login data:\r\n\r\n";
 	 $message.="Username: $email\r\n";
 	 $message.="Password: $password\r\n";
 	 $message.="\r\n"; 
 	 $message.="Your Nodo ID: $nodo_id\r\n\r\n";
 	 $message.="DISCLAIMER\r\n
-				(C) Copyright 2014 by Martin de Graaf & Paul Tonkes, http://www.nodo-domotica.nl\r\n
-				Nodo-Domotica provides the http://www.nodo-domotica.nl/webapp Website as a service to the public and Web siteowners.\r\n
+				(C) Copyright 2015 by Martin de Graaf & Paul Tonkes, http://www.nodo-domotica.nl\r\n
+				Nodo-Domotica provides the  https://webapp.nodo-domotica.nl Website as a service to the public and Web siteowners.\r\n
 				Nodo-Domotica is not responsible for, and expressly disclaims all liability for, damages of any kind arising out of use, reference to, or reliance on any information contained within the site. While the information contained within the site is periodically updated, no guarantee is given that the information provided in this Web site is correct, complete, and up-to-date.\r\n
 				Although the Nodo-Domotica Web site may include links providing direct access to other Internet resources, including Web sites, Nodo-Domotica is not responsible for the accuracy or content of information contained in these sites. Links from Nodo-Domotica to third-party sites do not constitute an endorsement by Nodo-Domotica of the parties or their products and services. The appearance on the Web site of advertisements and product or service information does not constitute an endorsement by Nodo-Domotica, and Nodo-Domotica has not investigated the claims made by any advertiser. Product information is based solely on material received from suppliers.\r\n
 				The WebApp and Nodo software are part of the 'Nodo Domotica' platform. The WebApp and all other related components are distributed under the terms of the GNU General Public License.  This program and hosting service comes with ABSOLUTELY NO WARRANTY.\r\n
@@ -190,14 +203,14 @@ END Generate NoDo ID
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<title>Nodo Web App Sign up</title> 
-	<link rel="stylesheet" href="themes/webapp.min.css" />
-	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
-	<link rel="stylesheet" href="js/jqm/jquery.mobile.structure-1.4.5.min.css" />
+	<link rel="stylesheet" href="../themes/webapp.min.css" />
+	<link rel="stylesheet" href="../themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="../js/jqm/jquery.mobile.structure-1.4.5.min.css" />
 	<link rel="stylesheet" type="text/css" href="../css/custom.css" />
-	<script src="js/jq/jquery-1.11.1.min.js"></script>
-	<script src="js/jqm/jquery.mobile-1.4.5.min.js"></script>
-	<link rel="icon" type="image/vnd.microsoft.icon" href="media/logo.ico" />
-	<link rel="shortcut icon" href="media/logo.ico" />
+	<script src="../js/jq/jquery-1.11.1.min.js"></script>
+	<script src="../js/jqm/jquery.mobile-1.4.5.min.js"></script>
+	<link rel="icon" type="image/vnd.microsoft.icon" href="../media/logo.ico" />
+	<link rel="shortcut icon" href="../media/logo.ico" />
 
 
 
@@ -211,7 +224,7 @@ END Generate NoDo ID
 		<h1>Nodo Web App Sign up</h1>
 		<div data-role="navbar" data-iconpos="top">
 		<ul>
-			<li><a href="index.html" data-icon="star"  data-ajax="false">Login</a></li>
+			<li><a href="../index.html" data-icon="star"  data-ajax="false">Login</a></li>
 			
 		</ul>
 	</div>

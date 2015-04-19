@@ -83,14 +83,14 @@ $app->get('/', function () use ($app) {
 // LOGIN route
 $app->post('/login', function () use ($app) {
    
-   global $salt;
+   global $SALT;
     $request = (array) json_decode($app->request()->getBody());
     $username = $request['username'];
     $password = $request['password'];
 	             
         if(isset($username) && isset($password)) {
            
-			$password = md5($salt.$password);
+			$password = md5($SALT.$password);
 			
 			try {		
 				$stmt = db()->prepare("SELECT * FROM nodo_tbl_users WHERE user_login_name=:username AND user_password=:password ");
@@ -990,7 +990,7 @@ $app->get('/usersettings', function () use($app) {
 //Edit user settings
 $app->put('/usersettings', function () use($app) {
     
-	global $salt;
+	global $SALT;
 	
 	$request = Slim::getInstance()->request();
     $usersettings = json_decode($request->getBody());
@@ -1007,7 +1007,7 @@ $app->put('/usersettings', function () use($app) {
        
 	   if ($user_password != '') {
 		   
-		$user_password = md5($salt.$user_password);
+		$user_password = md5($SALT.$user_password);
 	   
         $stmt = db()->prepare("UPDATE nodo_tbl_users SET 
 							  user_login_name=:user_login_name, 

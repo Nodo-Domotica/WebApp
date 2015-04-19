@@ -17,18 +17,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 
 
-
-
-
-$NODO_URL = "webapp.nodo-domotica.nl/nodo.php"; //Deze waarde zal in de Nodo onder HTTPhost worden gezet bij een auto config
+//MYSQL
+//-------------------------------------
 $MYSQLHOST = 'localhost';
 $DBNAME = 'nododom_webappdb';
 $MYSQLUSER = 'User';
 $MYSQLPWD = 'Password';
+//-------------------------------------
 
-//$salt word gebruikt om er voor te zorgen dat ook slecht gekozen wachtwoorden zoals 1234, abc sterk worden gehashed
-$salt = "3OvxO0Qi594v10bhu6DC3g2XG3ZozJsH"; //Let op indien je deze aanpast werkt het standaard wachtwoord niet meer!
+//Web App
+//-------------------------------------
+$NODO_URL = "webapp.nodo-domotica.nl/nodo.php"; //Deze waarde zal in de Nodo onder HTTPhost worden gezet bij een auto config. Http:// zal door de Nodo worden toegevoegd. Https:// wordt NIET door de Nodo ondersteund!
+$WEBAPP_URL = "https://webapp.nodo-domotica.nl"; //URL van de Web App
+$SALT = "3OvxO0Qi594v10bhu6DC3g2XG3ZozJsH"; //$SALT word gebruikt om er voor te zorgen dat ook slecht gekozen wachtwoorden zoals 1234, abc sterk worden gehashed. Let op indien je deze waarde aanpast werkt het standaard wachtwoord niet meer!
 
-
+//-------------------------------------
 
 ?>

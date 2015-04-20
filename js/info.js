@@ -1,7 +1,10 @@
 $('#info_page').on('pageinit', function(event) {
    
-   $('#webappdetails').append('<b>Web App version: </b>'+ webappversion +'<br \>' +
-							  '<b>Nodo IP-address: </b>'+ nodoip + ':' + nodoport + '<br \>').trigger("create");
+   $('#webappdetails').append('<b>Web App version: </b>'+ webappversion +'<br>' +
+							  '<b>Nodo IP-address: </b>'+ nodoip + '<br>' +
+							  '<b>Nodo port: </b>' + nodoport + '<br>' +
+							  '<b>Nodo ID: </b>' + nodoid +
+							  '<br>').trigger("create");
      
 });
 

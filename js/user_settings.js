@@ -51,10 +51,10 @@ $.ajax({
          success: function(data) {
  			
 			theme=data.webapp_theme;
-			themeheader=data.webapp_theme;
-			nodoip=data.nodoip;
-			nodoport=data.nodoport;
-			nodoid=data.nodoid;
+			//themeheader=data.webapp_theme;
+			nodoip=data.nodo_ip;
+			nodoport=data.nodo_port;
+			nodoid=data.nodo_id;
 			usergroup=data.user_group;
 			webapp_title=data.webapp_title;
 			changeGlobalTheme(theme);

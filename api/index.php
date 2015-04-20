@@ -87,6 +87,7 @@ $app->post('/login', function () use ($app) {
     $request = (array) json_decode($app->request()->getBody());
     $username = $request['username'];
     $password = $request['password'];
+	//$savecred = $request['savecred'];
 	             
         if(isset($username) && isset($password)) {
            
@@ -96,6 +97,7 @@ $app->post('/login', function () use ($app) {
 				$stmt = db()->prepare("SELECT * FROM nodo_tbl_users WHERE user_login_name=:username AND user_password=:password ");
 				$stmt->bindValue(':username', $username);
 				$stmt->bindValue(':password', $password);
+				
 				
 				$stmt->execute();
 
@@ -112,6 +114,7 @@ $app->post('/login', function () use ($app) {
 							$stmt2->bindValue(':userId', $results->id, PDO::PARAM_INT);
 							$stmt2->bindParam(":token", $random_token);
 							$stmt2->bindParam(":ip",$_SERVER['REMOTE_ADDR']);
+							//$stmt2->bindValue(':save', $savecred);
 									
 							$stmt2->execute();
 							
@@ -143,6 +146,24 @@ $app->post('/login', function () use ($app) {
 				}
 				}
     
+});
+
+//Logout
+$app->delete('/logout/:token', function ($token) use($app) {
+
+ try {
+
+	$stmt = db()->prepare("DELETE FROM nodo_tbl_tokens WHERE user_id=:userId and token=:token");
+	$stmt->bindParam(":token", $token);
+	$stmt->bindValue(':userId', $app->userId, PDO::PARAM_INT);
+   	$stmt->execute();
+	
+	} 
+	catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }	
+	
+	
 });
 
 
@@ -1870,6 +1891,76 @@ $app->get('/devicestate', function () use($app) {
 	 
 
 
+});
+
+//List all help text
+$app->get('/helptext', function () use($app) {
+ try {
+	$stmt = db()->prepare("SELECT * FROM nodo_tbl_help" );
+	$stmt->execute();
+	$results = $stmt->fetchAll(PDO::FETCH_OBJ);
+	echo json_encode($results);
+	
+} 
+	catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }		
+});
+//List help text
+$app->get('/helptext/:id', function ($id) use($app) {
+	
+		try {		
+		$stmt = db()->prepare("SELECT * FROM nodo_tbl_help WHERE help_key=:key");
+		$stmt->bindValue(':key', $id, PDO::PARAM_INT);
+		$stmt->execute();
+		
+		$results = $stmt->fetchObject();
+			if ($results != null) {
+				
+				echo json_encode($results);
+			}
+			else{
+				echo '{"error":[{"text":"help text not found."}]}';
+			}
+		}
+		catch(PDOException $e) {
+			echo '{"error":{"text":'. $e->getMessage() .'}}';
+		}
+	
+});
+//Update help text
+$app->put('/helptext/:id', function ($id) use($app)  {
+ 
+$userId = $app->userId; 
+ 
+if ($userId == 10 || $userId == 17) {
+	$request = Slim::getInstance()->request();
+    $help = json_decode($request->getBody());
+	$help_text = $help->help_text;
+	
+	
+			
+    try {
+       
+        $stmt = db()->prepare("UPDATE nodo_tbl_help SET 
+							  help_text=:help_text 
+							  WHERE help_key=:id");
+        
+		$stmt->bindParam(":id", $id);
+		$stmt->bindParam(":help_text", $help_text);
+        
+        $stmt->execute();
+        echo json_encode($help);
+    
+	} 
+	catch(PDOException $e) {
+        echo '{"error":{"text":'. $e->getMessage() .'}}';
+    }
+	
+}
+else {
+	 echo '{"error":{"text":"Access denied!!!"}}';
+}	
 });
 
 

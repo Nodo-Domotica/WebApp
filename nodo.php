@@ -251,14 +251,19 @@ if ($userId > 0 && $key_match == 1) {
         
         $stmt = db()->prepare("SELECT * FROM nodo_tbl_notifications_new WHERE user_id=:userId 
 		AND (unit=:unit OR unit='*') AND (:cmd LIKE (REPLACE(event,'*','%')))  
-		AND ('$par[1]' LIKE (REPLACE(par1,'*','%'))) 
-		AND ('$par[2]' LIKE (REPLACE(par2,'*','%'))) 
-		AND ('$par[3]' LIKE (REPLACE(par3,'*','%'))) 
-		AND ('$par[4]' LIKE (REPLACE(par4,'*','%'))) 
-		AND ('$par[5]' LIKE (REPLACE(par5,'*','%'))) ");
+		AND (:par1 LIKE (REPLACE(par1,'*','%'))) 
+		AND (:par2 LIKE (REPLACE(par2,'*','%'))) 
+		AND (:par3 LIKE (REPLACE(par3,'*','%'))) 
+		AND (:par4 LIKE (REPLACE(par4,'*','%'))) 
+		AND (:par5 LIKE (REPLACE(par5,'*','%'))) ");
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':unit', $unit);
         $stmt->bindParam(':cmd', $cmd);
+		$stmt->bindParam(':par1', $par[1]);
+		$stmt->bindParam(':par2', $par[2]);
+		$stmt->bindParam(':par3', $par[3]);
+		$stmt->bindParam(':par4', $par[4]);
+		$stmt->bindParam(':par5', $par[5]);
         $stmt->execute();
         
         $rows = $stmt->fetchall(PDO::FETCH_ASSOC);

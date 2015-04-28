@@ -171,6 +171,7 @@ function formToJSONDeviceCmd() {
 		"device_cmd_par3_event" : par3_event,
 		"device_cmd_par4_event" : par4_event,
 		"device_cmd_par5_event" : par5_event,
+		"device_cmd_compare" : $('#device_cmd_compare').val(),
 		"device_cmd_state_template" : $('#device_cmd_state_template').val(),
 		"device_cmd_type" : $('#device_cmd_type').val(),
 		"device_cmd_indicator" : $('#device_cmd_indicator').val(),
@@ -547,6 +548,7 @@ function renderDeviceCmdDetails(devicecmd, deviceType, typeDisabled) {
 	$('#device_cmd_cmd').val(devicecmd.command);
 	$('#device_cmd_unit_event').val(devicecmd.unit_event);
 	$('#device_cmd_event').val(cmd_event + par1_event + par2_event + par3_event + par4_event + par5_event);
+	$('#device_cmd_compare').val(devicecmd.compare);
 	$('#device_cmd_state_template').val(devicecmd.state_template);
 	$('#device_cmd_webapp_par1').val(devicecmd.webapp_par1);
 	$('#device_cmd_webapp_par2').val(devicecmd.webapp_par2);
@@ -1443,6 +1445,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#cmd_div').show();
 		$('#state_template_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#webapp_par1_div').hide();
 		$('#webapp_par2_div').hide();
 		$('#webapp_par3_div').hide();
@@ -1467,6 +1470,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#cmd_div').show();
 		$('#state_template_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#webapp_par1_div').hide();
 		$('#webapp_par2_div').hide();
 		$('#webapp_par3_div').hide();
@@ -1502,6 +1506,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#indicator_div').hide();
 		$('#cmd_div').show();
 		$('#event_div').show();
+		$('#compare_div').hide();
 		$('#state_template_div').show();
 		$('#label_device_cmd_webapp_par1').empty();
 		$('#label_device_cmd_webapp_par2').empty();
@@ -1536,6 +1541,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#indicator_div').hide();
 		$('#cmd_div').show();
 		$('#event_div').show();
+		$('#compare_div').hide();
 		$('#state_template_div').show();
 		$('#device_cmd_webapp_par1').val('');
 		$('#device_cmd_webapp_par2').val('');
@@ -1568,6 +1574,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#indicator_div').hide();
 		$('#cmd_div').show();
 		$('#event_div').show();
+		$('#compare_div').hide();
 		$('#state_template_div').show();
 		$('#label_device_cmd_webapp_par1').empty();
 		$('#label_device_cmd_webapp_par2').empty();
@@ -1610,11 +1617,14 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#device_cmd_webapp_par4').val('');
 		$('#cmd_div').hide();
 		$('#event_div').show();
+		$('#compare_div').show();
 		$('#state_template_div').hide();
 		$('#device_cmd_unit_event_label').empty();
 		$('#device_cmd_unit_event_label').append('Event from Unit: <a href="javascript:help_text(35,\'help_popup\')"><img src="../media/help.png"></a>');
 		$('#device_cmd_event_label').empty();
 		$('#device_cmd_event_label').append('Event: <a href="javascript:help_text(36,\'help_popup\')"><img src="../media/help.png"></a>');
+		$('#device_cmd_compare_label').empty();
+		$('#device_cmd_compare_label').append('Compare: <a href="javascript:help_text(59,\'help_popup\')"><img src="../media/help.png"></a>');
 
 		//$('#device_cmd_cmd_label').append('Event: <small>Use * for wildcard<br>Example: UserEvent 1,*');
 		$('#device_cmd_formula_label').empty();
@@ -1627,6 +1637,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 	} else if ($('#device_cmd_type').val() == 6) { //Indicator placeholder
 		$('#cmd_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#state_template_div').hide();
 		$('#device_cmd_cmd_label').hide();
 		$('#device_cmd_cmd').hide();
@@ -1656,6 +1667,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#linked_graph_div').hide();
 		$('#alarm_div').hide();
 		$('#event_div').show();
+		$('#compare_div').hide();
 		$('#value_div').show();
 		$('#indicator_icon_div').hide();
 		$('#indicator_div').hide();
@@ -1705,6 +1717,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 		$('#round_div').show();
 		$('#cmd_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#state_template_div').hide();
 		$('#device_cmd_formula_label').empty();
 		$('#device_cmd_formula_label').append('Formula: <sup>optional </sup> <small>(Example: 100*[VALUE])</small>');
@@ -1730,6 +1743,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 	} else if ($('#device_cmd_type').val() == 11) { //alarm
 		$('#cmd_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#state_template_div').hide();
 		$('#webapp_par1_div').hide();
 		$('#webapp_par2_div').hide();
@@ -1746,6 +1760,7 @@ function show_hide_webapp_parameters(deviceType, objectid, placeholderid) {
 	} else if ($('#device_cmd_type').val() == 99) { //Line & Empty space
 		$('#cmd_div').hide();
 		$('#event_div').hide();
+		$('#compare_div').hide();
 		$('#state_template_div').hide();
 		$('#device_cmd_cmd_label').hide();
 		$('#device_cmd_cmd').hide();

@@ -137,6 +137,7 @@ CREATE TABLE IF NOT EXISTS `nodo_tbl_objects_cmd` (
   `webapp_par2` varchar(16) DEFAULT '',
   `webapp_par3` varchar(16) DEFAULT '',
   `webapp_par4` varchar(16) DEFAULT '',
+  `compare` varchar(128) DEFAULT '',
   `value` varchar(16) DEFAULT '',
   `formula` varchar(128) NOT NULL,
   `round` int(11) NOT NULL DEFAULT '0',

@@ -83,7 +83,7 @@ $app->get('/', function () use ($app) {
 // LOGIN route
 $app->post('/login', function () use ($app) {
    
-   global $SALT;
+    global $SALT;
     $request = (array) json_decode($app->request()->getBody());
     $username = $request['username'];
     $password = $request['password'];
@@ -626,7 +626,7 @@ $app->post('/devicecmd', function () use($app) {
 	
     try {
        
-        $stmt = db()->prepare("INSERT INTO nodo_tbl_objects_cmd(user_id,object_id,description,type,indicator_icon,indicator_text,indicator_placeholder_id,command,unit_event,cmd_event,par1_event,par2_event,par3_event,par4_event,par5_event,state_template,webapp_par1,webapp_par2,webapp_par3,webapp_par4,value,formula,round,sort_order)VALUES (:userId, :object_id, :description, :type, :indicator_icon, :indicator_text, :indicator_placeholder_id, :command, :unit_event, :cmd_event, :par1_event, :par2_event, :par3_event, :par4_event, :par5_event, :state_template, :webapp_par1, :webapp_par2, :webapp_par3, :webapp_par4, :value, :formula, :round, (SELECT count(*)+1 FROM (SELECT id FROM nodo_tbl_objects_cmd WHERE user_id=:userId AND object_id=:object_id) AS x))");
+        $stmt = db()->prepare("INSERT INTO nodo_tbl_objects_cmd(user_id,object_id,description,type,indicator_icon,indicator_text,indicator_placeholder_id,command,unit_event,cmd_event,par1_event,par2_event,par3_event,par4_event,par5_event,compare,state_template,webapp_par1,webapp_par2,webapp_par3,webapp_par4,value,formula,round,sort_order)VALUES (:userId, :object_id, :description, :type, :indicator_icon, :indicator_text, :indicator_placeholder_id, :command, :unit_event, :cmd_event, :par1_event, :par2_event, :par3_event, :par4_event, :par5_event, :compare, :state_template, :webapp_par1, :webapp_par2, :webapp_par3, :webapp_par4, :value, :formula, :round, (SELECT count(*)+1 FROM (SELECT id FROM nodo_tbl_objects_cmd WHERE user_id=:userId AND object_id=:object_id) AS x))");
         $stmt->bindValue(':userId', $app->userId, PDO::PARAM_INT);
 		$stmt->bindParam(":object_id", $devicecmds->device_cmd_object_id);
         $stmt->bindParam(":description", $description);
@@ -642,6 +642,7 @@ $app->post('/devicecmd', function () use($app) {
 		$stmt->bindParam(":par3_event", $devicecmds->device_cmd_par3_event);
 		$stmt->bindParam(":par4_event", $devicecmds->device_cmd_par4_event);
 		$stmt->bindParam(":par5_event", $devicecmds->device_cmd_par5_event);
+		$stmt->bindParam(":compare", $devicecmds->device_cmd_compare);
 		$stmt->bindParam(":state_template", $devicecmds->device_cmd_state_template);
 		$stmt->bindParam(":webapp_par1", $devicecmds->device_cmd_webapp_par1);
 		$stmt->bindParam(":webapp_par2", $devicecmds->device_cmd_webapp_par2);
@@ -674,7 +675,7 @@ $app->put('/devicecmd/:id', function ($id) use($app) {
 	
     try {
       
-        $stmt = db()->prepare("UPDATE nodo_tbl_objects_cmd SET description=:description, type=:type, indicator_icon=:indicator_icon, indicator_placeholder_id=:indicator_placeholder_id, indicator_text=:indicator_text, command=:command, unit_event=:unit_event, cmd_event=:cmd_event, par1_event=:par1_event, par2_event=:par2_event, par3_event=:par3_event, par4_event=:par4_event, par5_event=:par5_event, state_template=:state_template, webapp_par1=:webapp_par1, webapp_par2=:webapp_par2, webapp_par3=:webapp_par3, webapp_par4=:webapp_par4, value=:value, formula=:formula, round=:round WHERE user_id=:userId AND id=:id");
+        $stmt = db()->prepare("UPDATE nodo_tbl_objects_cmd SET description=:description, type=:type, indicator_icon=:indicator_icon, indicator_placeholder_id=:indicator_placeholder_id, indicator_text=:indicator_text, command=:command, unit_event=:unit_event, cmd_event=:cmd_event, par1_event=:par1_event, par2_event=:par2_event, par3_event=:par3_event, par4_event=:par4_event, par5_event=:par5_event, compare=:compare, state_template=:state_template, webapp_par1=:webapp_par1, webapp_par2=:webapp_par2, webapp_par3=:webapp_par3, webapp_par4=:webapp_par4, value=:value, formula=:formula, round=:round WHERE user_id=:userId AND id=:id");
         $stmt->bindValue(':userId', $app->userId, PDO::PARAM_INT);
 		$stmt->bindParam(":id", $id);
         $stmt->bindParam(":description", $description);
@@ -690,6 +691,7 @@ $app->put('/devicecmd/:id', function ($id) use($app) {
 		$stmt->bindParam(":par3_event", $devicecmds->device_cmd_par3_event);
 		$stmt->bindParam(":par4_event", $devicecmds->device_cmd_par4_event);
 		$stmt->bindParam(":par5_event", $devicecmds->device_cmd_par5_event);
+		$stmt->bindParam(":compare", $devicecmds->device_cmd_compare);
 		$stmt->bindParam(":state_template", $devicecmds->device_cmd_state_template);
 		$stmt->bindParam(":webapp_par1", $devicecmds->device_cmd_webapp_par1);
 		$stmt->bindParam(":webapp_par2", $devicecmds->device_cmd_webapp_par2);
@@ -1596,7 +1598,7 @@ $app->post('/cmdsend/:cmd', function ($cmd) use($app){
 	$cmd = str_replace ( ' ', '%20',$cmd);
 	
 	//Controleren of de Nodo maximaal 3 minuten geleden een connectie met de Web App heeft gehad.
-    if (strtotime($cookie_update) >  (strtotime("now")-180)) {$response = HTTPRequest("http://$nodo_ip:$nodo_port/?event=$cmd&key=$key",0);}
+    if (strtotime($cookie_update) >  (strtotime("now")-180)) {$response = HTTPRequest_Long_Timeout("http://$nodo_ip:$nodo_port/?event=$cmd&key=$key",0);}
 	
 	
 	echo $response;

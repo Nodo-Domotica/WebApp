@@ -16,6 +16,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 $key_match=0;
+$compare_result=0;
+$i=0;
 
 /**
  * Evaluates a math equation and returns the result, sanitizing
@@ -46,6 +48,19 @@ function evalmath($equation)
     }
     
     return $result;
+}
+
+function num_cond ($var1, $op, $var2) {
+
+    switch ($op) {
+        case "=":  return floatval($var1) == floatval($var2);
+        case "!=": return floatval($var1) != floatval($var2);
+        case ">=": return floatval($var1) >= floatval($var2);
+        case "<=": return floatval($var1) <= floatval($var2);
+        case ">":  return floatval($var1) >  floatval($var2);
+        case "<":  return floatval($var1) <  floatval($var2);
+    default:       return false;
+    }   
 }
 
 
@@ -96,6 +111,7 @@ function closeOutput($stringToOutput)
     ignore_user_abort(true);
     header("Connection: close\r\n");
     header("Content-Encoding: none\r\n");
+	header("Webserver-IP: ".$_SERVER['SERVER_ADDR']."\r\n");
     header("Nodo-Date: Day=" . $dow . "; Date=" . $date . "; Time=" . $time . "; DLS=" . $DLS);
     ob_start();
     echo $stringToOutput;
@@ -189,7 +205,7 @@ if ($userId > 0 && $key_match == 1) {
     //Vanaf hier wordt de verbinding verbroken. Output na deze regel komt nooit bij de client aan.
     
     
-    closeOutput( $outputContent );
+closeOutput( $outputContent );
     
     
     
@@ -366,8 +382,9 @@ if ($userId > 0 && $key_match == 1) {
         
         if ($stmt->rowCount() > 0) {
             while ($row_rsDeviceCmd = array_shift($rows)) {
-                
-                
+				
+				
+                                
                 $indicator_icon = $row_rsDeviceCmd['indicator_icon'];
                 
                 
@@ -389,7 +406,55 @@ if ($userId > 0 && $key_match == 1) {
                 
                 
                 if ($row_rsDeviceCmd['type'] == 5) {
-                    
+					
+					
+					
+					if ($row_rsDeviceCmd['compare'] !='') {
+						
+											
+						$split_comparison_raw = explode(";",$row_rsDeviceCmd['compare']);
+						
+						
+						$x=0;
+						$y=0;
+						foreach ($split_comparison_raw as $split_comparison_raw_a=>$split_comparison_raw_b){ 
+							$i=0;
+							
+							
+							
+							if ( trim($split_comparison_raw_b," ") ) {
+								$x++;
+								
+								$split_comparison = str_ireplace($placeholders, $params, $split_comparison_raw_b);
+								$split_comparison = explode(" ",$split_comparison);
+								foreach ($split_comparison as $split_comparison_a=>$split_comparison_b){ 
+									
+									if ( trim($split_comparison_b," "  ) || $split_comparison_b === '0') {
+										
+										$i++;
+										$var[$i]=$split_comparison_b;
+										}
+							
+								}
+										
+								$compare_result = num_cond ($var[1], $var[2], $var[3]);
+								if($compare_result) {$y++;}
+								
+															
+								 
+								
+							}
+							
+						}
+						
+						
+					
+					}
+					
+										
+					if ($x==$y || $row_rsDeviceCmd['compare'] =='' ) {
+						
+					                    
                     $object_id                = $row_rsDeviceCmd['object_id'];
                     $indicator_placeholder_id = $row_rsDeviceCmd['indicator_placeholder_id'];
                     
@@ -412,9 +477,13 @@ if ($userId > 0 && $key_match == 1) {
                         $stmt->bindParam(':indicator_text', $indicator_text);
                         $stmt->bindParam(':object_id', $object_id);
                         $stmt->execute();
+						
+						//echo ("set icon to: " . $indicator_icon . "<br>");
+						
                     }
                     
                 }
+			}
                 
                 if ($row_rsDeviceCmd['type'] == 20 || $row_rsDeviceCmd['type'] == 21 || $row_rsDeviceCmd['type'] == 30 || $row_rsDeviceCmd['type'] == 31 || $row_rsDeviceCmd['type'] == 32) {
                     $object_id = $row_rsDeviceCmd['id'];

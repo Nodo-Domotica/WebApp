@@ -2,7 +2,6 @@ var theme;
 var nodoip;
 var nodoport;
 var nodoid;
-var webappversion='WebApp (SWINWA-PROD-V1.5)';
 var usergroup;
 var webapp_title;
 

@@ -11,12 +11,37 @@ function HTTPRequest($Url,$Headers){
     global $nodo_port;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $Url);
-    curl_setopt($ch, CURLOPT_USERAGENT, "Nodo WebApp");
+    curl_setopt($ch, CURLOPT_USERAGENT, "Nodo Web App");
     curl_setopt($ch, CURLOPT_HEADER, $Headers);
 	//curl_setopt($ch, CURLOPT_PORT, $nodo_port);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,5);
 	curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    $output = curl_exec($ch);
+	$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+	curl_close($ch);
+	
+	return $output;
+	
+}
+
+function HTTPRequest_Long_Timeout($Url,$Headers){
+
+	global $http_status;
+    
+    if (!function_exists('curl_init')){
+        die('Sorry cURL is not installed!');
+    }
+ 
+    global $nodo_port;
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $Url);
+    curl_setopt($ch, CURLOPT_USERAGENT, "Nodo Web App");
+    curl_setopt($ch, CURLOPT_HEADER, $Headers);
+	//curl_setopt($ch, CURLOPT_PORT, $nodo_port);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,5);
+	curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     $output = curl_exec($ch);
 	$http_status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 	curl_close($ch);

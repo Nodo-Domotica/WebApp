@@ -226,7 +226,7 @@ function NewCommand(objectid,device_type,var1,var2,var3,var4,var5) {
 		else if (var2 == 1) { //dim
 			newPredefCmd(objectid,"1","On","NewKAKUSend "+var1+",On")
 			newPredefCmd(objectid,"1","Off","NewKAKUSend "+var1+",Off")
-			newPredefCmd(objectid,"2","Dim","NewKAKUSend "+var1+",[slider]","NewKAKUSend "+var1+",*","*","[par2]","","","1","16","1")
+			newPredefCmd(objectid,"2","Dim","NewKAKUSend "+var1+",[slider]","NewKAKU "+var1+",*","*","[par2]","","","1","16","1")
 			newPredefCmd(objectid,"5","Dim","","NewKAKU "+var1+",*","*","","17")
 			newPredefCmd(objectid,"5","On","","NewKAKU "+var1+",On","*","","17")
 			newPredefCmd(objectid,"5","Off","","NewKAKU "+var1+",Off","*","","16")

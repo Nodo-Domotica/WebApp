@@ -1,0 +1,16 @@
+
+Build 100 [22-4-2015]
+#####################
+
+-Kolom compare (varchar 128) toegevoegd aan MYSQL tabel nodo_tbl_objects_cmd
+-Het is nu mogelijk om een indicator doormiddel van een vergelijking wel/niet te activeren in de vorm [par2] >=10 ; [par2 <=100]
+
+-Er wordt nu een header 'Webserver-IP:' meegegeven omdat het met de standaard arduino ethernet lib niet mogelijk is om het IP-adres weer te geven van een door DNS geresolved host.
+
+-Foutje in het aanmaken van een newkaku device opgelost.
+-Achtergronden van grafieken ondoorzichtig gemaakt.
+-Build toegevoegd aan info
+
+
+
+

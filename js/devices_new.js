@@ -704,6 +704,19 @@ function ExecActivity(index) {
 }
 
 function OpenGraph(index) {
+	
+	var graphBackgroundColor;
+	
+	if (theme == 'e') {
+		graphBackgroundColor = "#191919";
+			
+	} 
+	else if (theme == 'b')  {graphBackgroundColor = "#D1D1D1";}
+	else if (theme == 'a')  {graphBackgroundColor = "#F9F9F9";}
+	else if (theme == 'f')  {graphBackgroundColor = "#FFFFFF";}
+
+	
+	
 	DeviceIndex = index;
 	ValueHtml = '';
 	$('#graph').empty();
@@ -741,10 +754,13 @@ function OpenGraph(index) {
 					if (devicecmd.type == 20 || devicecmd.type == 120 || devicecmd.type == 21 || devicecmd.type == 121) { //line graph
 
 						var options = {
-
+							grid : {
+								backgroundColor: graphBackgroundColor
+							},
 							xaxis : {
 								mode : "time",
 								minTickSize : [1, 'minute']
+								
 							},
 							legend : {
 								backgroundOpacity : 0
@@ -818,6 +834,9 @@ function OpenGraph(index) {
 					} else if (devicecmd.type == 30 || devicecmd.type == 130) { //bar graph day totals
 
 						var options = {
+							grid : {
+								backgroundColor: graphBackgroundColor
+							},
 							xaxis : {
 								mode : "time",
 								minTickSize : [1, 'minute']
@@ -883,6 +902,9 @@ function OpenGraph(index) {
 
 
 						var options = {
+							grid : {
+								backgroundColor: graphBackgroundColor
+							},
 
 							xaxis : {
 								mode : null,
@@ -958,6 +980,9 @@ function OpenGraph(index) {
 					} else if (devicecmd.type == 32 || devicecmd.type == 132) { //bar graph month totals
 
 						var options = {
+							grid : {
+								backgroundColor: graphBackgroundColor
+							},
 							xaxis : {
 								mode : "time",
 								minTickSize : [1, 'month'],

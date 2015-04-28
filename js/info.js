@@ -1,6 +1,11 @@
+var webappversion='SWINWA-PROD-V1.5';
+var webappbuild='100 [22-4-2015]';
+
+
 $('#info_page').on('pageinit', function(event) {
    
    $('#webappdetails').append('<b>Web App version: </b>'+ webappversion +'<br>' +
+							  '<b>Build: </b>'+ webappbuild +'<br>' +
 							  '<b>Nodo IP-address: </b>'+ nodoip + '<br>' +
 							  '<b>Nodo port: </b>' + nodoport + '<br>' +
 							  '<b>Nodo ID: </b>' + nodoid +

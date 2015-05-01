@@ -11,6 +11,13 @@ Build 100 [22-4-2015]
 -Achtergronden van grafieken ondoorzichtig gemaakt.
 -Build toegevoegd aan info
 
+Build 101 [1-5-2015]
+#####################
+
+-Fout opgelost waardoor de Nodo geen connectie kon opzetten naar een locale Web App installatie.
+
+
+
 
 
 

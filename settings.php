@@ -27,8 +27,15 @@ $MYSQLPWD = 'Password';
 
 //Web App
 //-------------------------------------
-$NODO_URL = "webapp.nodo-domotica.nl/nodo.php"; //Deze waarde zal in de Nodo onder HTTPhost worden gezet bij een auto config. Http:// zal door de Nodo worden toegevoegd. Https:// wordt NIET door de Nodo ondersteund!
-$WEBAPP_URL = "https://webapp.nodo-domotica.nl"; //URL van de Web App
+$NODO_URL = "webserver/webapp/nodo.php";  
+/*
+Deze waarde zal in de Nodo onder HTTPhost worden gezet bij een auto config.
+Http:// zal door de Nodo worden toegevoegd. Https:// wordt NIET door de Nodo ondersteund! 
+Stel je hebt de Web App in een directory webapp staan "http://webserver/webapp" dan vul je
+in $NODO_URL = "webserver/webapp/nodo.php"
+
+webserver mag een IP-adres of host-name zijn. 
+*/
 $SALT = "3OvxO0Qi594v10bhu6DC3g2XG3ZozJsH"; //$SALT word gebruikt om er voor te zorgen dat ook slecht gekozen wachtwoorden zoals 1234, abc sterk worden gehashed. Let op indien je deze waarde aanpast werkt het standaard wachtwoord niet meer!
 //-------------------------------------
 

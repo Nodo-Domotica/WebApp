@@ -1,5 +1,5 @@
 
-$.ajax({
+$.ajax({cache: false,
         type: 'DELETE',
         url: '../api/logout/' + getCookie("TOKEN"),
 		beforeSend : function(xhr) {

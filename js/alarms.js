@@ -1,7 +1,7 @@
 
 function editAlarm(nr) {	
 
-$.ajax({ 
+$.ajax({cache: false, 
 		 url: 'api/alarms/' + nr,
          dataType: "json",
 		 beforeSend : function(xhr) {

@@ -91,7 +91,7 @@ function addPredefinedObject(description,group,icon,type,cmdtype,cmdvar1,cmdvar2
     });
         
 		
-		$.ajax({
+		$.ajax({cache: false,
                 type: 'POST',
                 contentType: 'application/json',
                 url: '../api/devices',
@@ -142,7 +142,7 @@ function addPredefinedCmd(Cmd) {
 		$.mobile.loading( "show");
         
 		
-		$.ajax({
+		$.ajax({cache: false,
                 type: 'POST',
                 contentType: 'application/json',
                 url: '../api/devicecmd',

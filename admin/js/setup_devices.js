@@ -15,7 +15,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -207,7 +207,7 @@ function addDevice() {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'POST',
 		contentType : 'application/json',
 		url : '../api/devices',
@@ -246,7 +246,7 @@ function editDevice(id) {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'PUT',
 		contentType : 'application/json',
 		url : '../api/devices/' + id,
@@ -283,7 +283,7 @@ function editDevice(id) {
 
 function findDevice(id) {
 	$.mobile.loading("show");
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		url : '../api/devices/' + id,
 		dataType : "json",
@@ -298,7 +298,7 @@ function findDevice(id) {
 	            },
 				error : function(xhr, ajaxOptions, thrownError) {
 				
-				console.log(thrownError);
+				
 				if (xhr.status==403) { 
 					$.mobile.loading( "hide");
 					//$('#popupLogin').popup();
@@ -339,7 +339,7 @@ function addDeviceCmd(deviceType) {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'POST',
 		contentType : 'application/json',
 		url : '../api/devicecmd',
@@ -380,7 +380,7 @@ function editDeviceCmd(id, deviceType) {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'PUT',
 		contentType : 'application/json',
 		url : '../api/devicecmd/' + id,
@@ -417,7 +417,7 @@ function editDeviceCmd(id, deviceType) {
 
 function findDeviceCmd(id, deviceType) {
 	$.mobile.loading("show");
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		url : '../api/devicecmd/' + id,
 		dataType : "json",
@@ -491,8 +491,7 @@ function renderDeviceDetails(device) {
 
 function renderDeviceCmdDetails(devicecmd, deviceType, typeDisabled) {
 
-	console.log($("#device_cmd_object_id").val());
-
+	
 	if (typeDisabled == true) { //Bij aanpassen type disable. Het heeft geen nut om het type te wijzigen indien het object al bestaat.
 		$("#device_cmd_type").selectmenu().selectmenu("disable");
 	} else {
@@ -672,7 +671,7 @@ function getGroups(div) {
 
 	var div2 = '#' + div;
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/groups',
@@ -721,7 +720,7 @@ function getGroups(div) {
 
 function getIndicatorPlaceholders(objectid, placeholderid) {
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/indicatorplaceholders/' + objectid,
@@ -784,7 +783,7 @@ function getIndicatorPlaceholders(objectid, placeholderid) {
 
 function getGraphs() {
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/graphs',
@@ -954,7 +953,7 @@ function getDevices(sort_id) {
 
 	page_refresh='No';
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		url : '../api/devices',
 		dataType : "json",
@@ -1057,7 +1056,7 @@ function getDeviceCmds(sort_id, id, deviceType) {
 
 	$('#device_cmd_btnAdd').show();
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/devicecmds/' + id,
@@ -1270,7 +1269,7 @@ function deleteDevice() {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'DELETE',
 		url : '../api/devices/' + DeviceID,
 		beforeSend : function(xhr) {
@@ -1308,7 +1307,7 @@ function deleteDeviceExtra() {
 	var DeviceIDExtra2 = DeviceIDExtra;
 	var TempdeviceType2 = TempdeviceType;
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'DELETE',
 		url : '../api/devicecmd/' + IDExtra,
 		beforeSend : function(xhr) {
@@ -1348,7 +1347,7 @@ function sortDevice(DeviceId, sort_up_down) {
 
 	var sortid = DeviceId;
 	$.mobile.loading("show");
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'PUT',
 		contentType : 'application/json',
 		url : '../api/sortdevice/' + DeviceId + '/' + sort_up_down,
@@ -1389,7 +1388,7 @@ function sortDeviceExtra(Id, sort_up_down, object_id, deviceType) {
 	var object_id = object_id;
 	$.mobile.loading("show");
 	
-	$.ajax({
+	$.ajax({cache: false,cache: false,
 		type : 'PUT',
 		url : '../api/sortdevicecmd/' + Id +'/' + sort_up_down,
 		beforeSend : function(xhr) {
@@ -1794,7 +1793,7 @@ $('#device_icon').change(function (e) {
 
 $('#device_cmd_indicator').change(function (e) {
 	$('#icon2_div').empty();
-	$('#icon2_div').append('<img src="../media/' + $('#device_cmd_indicator').val() + '.png" height="16" width="16">');
+	$('#icon2_div').append('<img src="../media/' + $('#device_cmd_indicator').val() + '.png" height="25" width="25">');
 
 });
 

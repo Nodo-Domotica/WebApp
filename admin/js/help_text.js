@@ -2,7 +2,7 @@
 
 function help_text(key,div) {
 	
-	$.ajax({ 
+	$.ajax({cache: false, 
          async: false,
 		 url: path+'api/helptext/'+key, 
          dataType: "json",

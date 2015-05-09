@@ -8,7 +8,7 @@ function Nodo_State(){
 
 var status;
 
-$.ajax({ 
+$.ajax({cache: false, 
          
 		 url: path+'api/nodostate', 
          dataType: "json",

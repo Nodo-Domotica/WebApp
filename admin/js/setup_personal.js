@@ -46,7 +46,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -116,7 +116,7 @@ $('#personal_btnSave').click(function () {
 
 function getUserSettings() {
 	$.mobile.loading("show");
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'GET',
 		url : '../api/usersettings',
 		dataType : "json",
@@ -150,7 +150,7 @@ function editUser() {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'PUT',
 		contentType : 'application/json',
 		url : '../api/usersettings',

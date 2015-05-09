@@ -64,7 +64,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -122,7 +122,7 @@ $('#btnSaveGroup').click(function () {
 
 function findGroup(id) {
 	$.mobile.loading("show");
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'GET',
 		url : '../api/groups/' + id,
 		dataType : "json",
@@ -160,7 +160,7 @@ function addGroup() {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'POST',
 		contentType : 'application/json',
 		url : '../api/groups',
@@ -197,7 +197,7 @@ function editGroup(id) {
 
 	$.mobile.loading("show");
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'PUT',
 		contentType : 'application/json',
 		url : '../api/groups/' + id,
@@ -258,7 +258,7 @@ function confirmDeleteGroup(id) {
 
 function DeleteGroup(id) {
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'DELETE',
 		url : '../api/groups/' + id,
 		beforeSend : function (xhr) {
@@ -313,7 +313,7 @@ function formToJSONGroups() {
 
 function getGroups() {
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'GET',
 		url : '../api/groups',
 		dataType : "json",

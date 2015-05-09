@@ -16,7 +16,8 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
+		cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -83,6 +84,7 @@ $('#scripts_page').on('pagehide', function(event) {
 
 function getFiles() {
 	
+		
 	$('#scriptfile').empty();
 	$('#scriptfile').append('<option value="list">Please wait, getting scripts...</option>');
 	$('#scriptfile').selectmenu("refresh", true);
@@ -91,8 +93,9 @@ function getFiles() {
 	$('#checkbox').checkboxradio('disable');
 	$('#scriptcontent').textinput('disable');
 			
- $.ajax({
-                type: 'GET',
+ $.ajax({cache: false,
+                cache: false,
+				type: 'GET',
                 contentType: 'application/json',
                 url: '../api/filelist',
                 dataType: "json",
@@ -130,7 +133,7 @@ function getFiles() {
 		$.each(files, function(index, file) {
 								
 			$('#scriptfile').append('<option value="'+file.file+'">'+file.file+'</option>');
-								
+						
 		});
 		
 				
@@ -164,7 +167,8 @@ $('#scriptfile').change( function( e ) {
 				$('#checkbox').checkboxradio('enable');
 				$('#scriptcontent').textinput('enable');
 				
-				 $.ajax({
+				 $.ajax({cache: false,
+				cache: false,
                 type: 'GET',
                 contentType: 'text/plain',
                 url: '../api/getfile/' + $('#scriptfile').val(),
@@ -216,7 +220,8 @@ $('#eventlist').click( function( e ) {
 		
 		$('#scriptcontent').val('').css('height', '50px');
 		
-		 $.ajax({
+		 $.ajax({cache: false,
+				cache: false,
                 type: 'GET',
                 contentType: 'text/plain',
                 url: '../api/getfile/EVENTLST' ,
@@ -269,7 +274,8 @@ $('#write').click( function( e ) {
 				$('#write_message').append('<img src="../media/loading.gif"/> Please wait, writing eventlist....<br \>');
 				$( "#scripts_popup_msg" ).popup("open");
 				
-				$.ajax({
+				$.ajax({cache: false,
+				cache: false,
                 type: 'POST',
                 contentType: 'text/plain',
                 url: '../api/writefile',
@@ -312,7 +318,8 @@ $('#write').click( function( e ) {
 			    $('#write_message').append('<img src="../media/loading.gif"/> Please wait, uploading script....<br \>');
 				$( "#scripts_popup_msg" ).popup("open");
 				
-				$.ajax({
+				$.ajax({cache: false,
+				cache: false,
                 type: 'POST',
                 contentType: 'text/plain',
                 url: '../api/writefile',
@@ -396,7 +403,8 @@ $('#new3').click(function( e ) {
 	
 		$('#new_message').append('Creating file: ' + $('#scriptfilenew').val().toUpperCase() +'...');
 		
-		 $.ajax({
+		 $.ajax({cache: false,
+				cache: false,
                 type: 'POST',
                 contentType: 'text/plain',
                 url: '../api/newfile/' + $('#scriptfilenew').val(),
@@ -426,6 +434,7 @@ $('#new3').click(function( e ) {
 		
 		
 		getFiles()
+		
                 }
         });
 	
@@ -471,7 +480,8 @@ $('#delete3').click(function( e ) {
 	
 	$('#delete3').button('disable');
 	
-	 $.ajax({
+	 $.ajax({cache: false,
+				cache: false,
                 type: 'DELETE',
                 contentType: 'text/plain',
                 url: '../api/deletefile/' + $('#scriptfile').val(),

@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 function Get_Nodo_Messages()
  {  
  
- $.ajax({ 
+ $.ajax({cache: false, 
          url: 'api/messages/100', 
          dataType: "json",
 		 beforeSend : function(xhr) {

@@ -63,7 +63,7 @@ if (command != '') {
 				  textVisible: true
 				});
 				
-				$.ajax({ 
+				$.ajax({cache: false, 
 				type: 'POST',
                 contentType: 'text/plain',
 				 url: 'api/cmdsend/' + command, 

@@ -28,7 +28,7 @@ function setCookie(cname, cvalue, exdays) {
 
 	
 function getUsersettings() {
-$.ajax({ 
+$.ajax({cache: false, 
          async: false,
 		 url: path+'api/usersettings', 
          dataType: "json",

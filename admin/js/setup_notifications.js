@@ -15,7 +15,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -107,7 +107,7 @@ $('#btnSave').click(function() {
 
 function getNotifications() {
 	
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/notifications',
@@ -190,7 +190,7 @@ function confirmDeleteNotification(id) {
 
 function DeleteNotification(id) {
 
-$.ajax({
+$.ajax({cache: false,
         type: 'DELETE',
         url: '../api/notifications/' + id,
 		beforeSend : function(xhr) {
@@ -239,7 +239,7 @@ function newNotification() {
 
 function findNotification(id) {
        $.mobile.loading( "show");
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/notifications/' + id,
                 dataType: "json",
@@ -278,7 +278,7 @@ function addNotification() {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'POST',
                 contentType: 'application/json',
                 url: '../api/notifications',
@@ -315,7 +315,7 @@ function editNotification(id) {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'PUT',
                 contentType: 'application/json',
                 url: '../api/notifications/' + id,
@@ -361,7 +361,7 @@ function renderDetails(notification) {
 	$('#nodo_id').append('<option value="0">Select Remote Nodo ID</option>');
 
 	
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'GET',
 		contentType : 'application/json',
 		url : '../api/nodostrustingyou',

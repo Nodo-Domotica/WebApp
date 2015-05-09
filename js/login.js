@@ -8,7 +8,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : "POST",
 		url : "api/login",
 		contentType : "application/json; charset=utf-8",

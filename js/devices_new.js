@@ -192,7 +192,7 @@ function update_cmd_state(index) {
 
 	//console.log('update state');
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devicecmds/' + index,
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -267,7 +267,7 @@ function update_cmd_state(index) {
 
 function getDevices() {
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devices',
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -329,7 +329,7 @@ function getDevices() {
 
 function getGroups() {
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/groups',
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -352,7 +352,7 @@ function getGroups() {
 		success : function (data) {}
 	});
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/groups',
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -446,7 +446,7 @@ function OpenDevicePanel(index) {
 	panelhtml = '';
 	panelhtml = panelhtml + '<h4>' + ArrDeviceName[DeviceIndex] + '</h4>'
 
-		$.ajax({
+		$.ajax({cache: false,
 			url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
 			dataType : "json",
 			beforeSend : function (xhr) {
@@ -580,7 +580,7 @@ function OpenRemotePage(index) {
 	$("#header_remote").html(ArrDeviceName[DeviceIndex]);
 	x = 1;
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -657,7 +657,7 @@ function ExecActivity(index) {
 	DeviceIndex = index;
 	NodoCommand = '';
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -721,7 +721,7 @@ function OpenGraph(index) {
 	ValueHtml = '';
 	$('#graph').empty();
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -777,7 +777,7 @@ function OpenGraph(index) {
 						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
 						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
 
-						$.ajax({
+						$.ajax({cache: false,
 							url : url,
 							dataType : "json",
 							beforeSend : function (xhr) {
@@ -849,7 +849,7 @@ function OpenGraph(index) {
 						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
 						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
 
-						$.ajax({
+						$.ajax({cache: false,
 							url : 'api/graphdata/' + devicecmd.id + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type,
 							dataType : "json",
 							beforeSend : function (xhr) {
@@ -918,7 +918,7 @@ function OpenGraph(index) {
 							shadowSize : 3,
 
 						};
-						console.log(devicecmd.type);
+						//console.log(devicecmd.type);
 						if (devicecmd.type == 131) {
 							url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
 						} else {
@@ -928,7 +928,7 @@ function OpenGraph(index) {
 						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
 						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
 
-						$.ajax({
+						$.ajax({cache: false,
 							url : url,
 							dataType : "json",
 							beforeSend : function (xhr) {
@@ -993,7 +993,7 @@ function OpenGraph(index) {
 							},
 							shadowSize : 3
 						};
-						console.log(devicecmd.type);
+						//console.log(devicecmd.type);
 						if (devicecmd.type == 132) {
 							url = 'api/graphdata/' + devicecmd.webapp_par4 + '/' + devicecmd.webapp_par3 + '/' + devicecmd.type;
 						} else {
@@ -1003,7 +1003,7 @@ function OpenGraph(index) {
 						ValueHtml = ValueHtml + '<h3>' + devicecmd.description + '</h3>';
 						ValueHtml = ValueHtml + '<div id="graph' + devicecmd.id + '" style="width:100%;height:300px;position: relative;"></div><br>';
 
-						$.ajax({
+						$.ajax({cache: false,
 							url : url,
 							dataType : "json",
 							beforeSend : function (xhr) {
@@ -1071,7 +1071,7 @@ function OpenGraph(index) {
 function OpenAlarmPanel(index) {
 	DeviceIndex = index;
 
-	$.ajax({
+	$.ajax({cache: false,
 		url : 'api/devicecmds/' + ArrDeviceID[DeviceIndex],
 		dataType : "json",
 		beforeSend : function (xhr) {
@@ -1117,7 +1117,7 @@ function OpenAlarmPanel(index) {
 
 function send_event(event, type, sync) {
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : 'POST',
 		contentType : 'text/plain',
 		url : 'api/cmdsend/' + event,
@@ -1168,7 +1168,7 @@ function send_event(event, type, sync) {
 
 						}
 					} else {
-						console.log('Command ' + event + ' received by Nodo!');
+						//console.log('Command ' + event + ' received by Nodo!');
 						setTimeout(function () {
 							Device_State()
 						}, 500);

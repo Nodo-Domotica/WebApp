@@ -20,7 +20,7 @@ function Get_Nodo_Status()
  
  var	element = document.getElementById('status_div');
  
- $.ajax({
+ $.ajax({cache: false,
                 type: 'GET',
                 contentType: 'text/plain',
                 url: '../api/nodostatus',

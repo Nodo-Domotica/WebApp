@@ -4,7 +4,7 @@ function checkSession() {
 
 
 
-$.ajax({ 
+$.ajax({cache: false, 
          async: false, 
          url: '/webservice/json_check_session.php', 
          dataType: "json", 

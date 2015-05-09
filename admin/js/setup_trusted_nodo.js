@@ -13,7 +13,7 @@ $('#btnSignin').click(function () {
 		var s = 0;
 	}
 
-	$.ajax({
+	$.ajax({cache: false,
 		type : "POST",
 		url : "../api/login",
 		contentType : "application/json; charset=utf-8",
@@ -170,7 +170,7 @@ $('#btnSaveTrustedCmd').click(function() {
 
 function gettrusted_nodo() {
 	
-	 $.ajax({
+	 $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/nodosyoutrust',
                 dataType: "json",
@@ -248,7 +248,7 @@ function gettrusted_cmd(id) {
     
 	$.mobile.loading( "show");
 	
-	 $.ajax({
+	 $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/cmdsyoutrust/'+id,
                 dataType: "json",
@@ -354,7 +354,7 @@ function confirmDeleteTrustedCmd(id) {
 
 function DeleteTrustedNodo(id) {
 
-$.ajax({
+$.ajax({cache: false,
         type: 'DELETE',
         url: '../api/nodosyoutrust/' + id,
 		beforeSend : function(xhr) {
@@ -387,7 +387,7 @@ $.ajax({
 
 function DeleteTrustedCmd(id) {
 
-$.ajax({
+$.ajax({cache: false,
         type: 'DELETE',
         url: '../api/cmdyoutrust/' + id,
 		beforeSend : function(xhr) {
@@ -442,7 +442,7 @@ function newTrustedCmd() {
 
 function findTrustedNodo(id) {
        $.mobile.loading( "show");
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/nodosyoutrust/' + id,
                 dataType: "json",
@@ -480,7 +480,7 @@ function findTrustedNodo(id) {
 
 function findTrustedCmd(id) {
        $.mobile.loading( "show");
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/cmdyoutrust/' + id,
                 dataType: "json",
@@ -519,7 +519,7 @@ function addTrustedNodo() {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'POST',
                 contentType: 'application/json',
                 url: '../api/nodosyoutrust',
@@ -556,7 +556,7 @@ function addTrustedCmd() {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'POST',
                 contentType: 'application/json',
                 url: '../api/cmdyoutrust',
@@ -595,7 +595,7 @@ function editTrustedNodo(id) {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'PUT',
                 contentType: 'application/json',
                 url: '../api/nodosyoutrust/' + id,
@@ -632,7 +632,7 @@ function editTrustedCmd(id) {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'PUT',
                 contentType: 'application/json',
                 url: '../api/cmdyoutrust/' + id,

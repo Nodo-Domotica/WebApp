@@ -83,7 +83,7 @@ function gethelp() {
 
 function findhelp(id) {
        $.mobile.loading( "show");
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'GET',
                 url: '../api/helptext/' + id,
                 dataType: "json",
@@ -104,7 +104,7 @@ function edithelp(id) {
 		
 		$.mobile.loading( "show");
         
-        $.ajax({
+        $.ajax({cache: false,
                 type: 'PUT',
                 contentType: 'application/json',
                 url: '../api/helptext/' + id,

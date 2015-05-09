@@ -16,6 +16,10 @@ Build 101 [1-5-2015]
 
 -Fout opgelost waardoor de Nodo geen connectie kon opzetten naar een locale Web App installatie.
 
+Build 102 [9-5-2015]
+#####################
+
+-Door caching issues in XMLHttpRequest werkte de Web App niet juist in Internet explorer.
 
 
 

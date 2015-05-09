@@ -7,7 +7,7 @@ function Device_State(){
 
 var status;
 
-$.ajax({ 
+$.ajax({cache: false, 
          async: false,
 		 url: 'api/devicestate', 
          dataType: "json",
@@ -41,6 +41,7 @@ $.ajax({
 						/\[u\](.*?)\[\/u\]/ig,
 						/\[sup\](.*?)\[\/sup\]/ig,
 						/\[sub\](.*?)\[\/sub\]/ig,
+						/\[color=rgb(.*?)\](.*?)\[\/color\]/ig,
 						/\[blink\](.*?)\[\/blink\]/ig						
 					]; // note: NO comma after the last entry
 
@@ -51,6 +52,7 @@ $.ajax({
 						'<u>$1</u>',
 						'<sup>$1</sup>',
 						'<sub>$1</sub>',
+						'<span style="color:rgb$1">$2</span>',
 						'<span class="blink_me">$1</span>'
 					];
 

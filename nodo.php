@@ -16,6 +16,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *************************************************************************************************************************/
 $key_match=0;
+$key_nodo=0;
 $compare_result=0;
 $i=0;
 
@@ -147,8 +148,9 @@ if (isset($_GET['id'])) {
     $nodo_password  = $row['nodo_password'];
     
     $key_webapp = md5($cookie_webapp . ":" . $nodo_password);
-    $key_nodo   = $_GET['key'];
-    
+    if (isset($_GET['key'])) {
+	$key_nodo   = $_GET['key'];
+    }
     if ($key_webapp == $key_nodo) {
         $key_match = 1;
     }
@@ -160,7 +162,7 @@ if (isset($_GET['id'])) {
         $cookie = $_GET['cookie'];
         $build  = $_SERVER['HTTP_USER_AGENT'];
         
-        $stmt = db()->prepare("UPDATE nodo_tbl_users SET cookie=:cookie, cookie_update=NOW(), cookie_count=:cookie_count, nodo_build=:nodo_build,webapp_version='15' WHERE id=:userId");
+        $stmt = db()->prepare("UPDATE nodo_tbl_users SET cookie=:cookie, cookie_update=NOW(), cookie_count=:cookie_count, nodo_build=:nodo_build WHERE id=:userId");
         $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':cookie', $cookie);
         $stmt->bindParam(':cookie_count', $cookie_counter);

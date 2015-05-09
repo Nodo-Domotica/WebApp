@@ -19,7 +19,7 @@ function Get_Nodo_Events()
  {  
  
  
- $.ajax({ 
+ $.ajax({cache: false, 
          url: 'api/events/100', 
          dataType: "json",
 		 beforeSend : function(xhr) {

@@ -1,5 +1,5 @@
 var webappversion='SWINWA-PROD-V1.5';
-var webappbuild='100 [22-4-2015]';
+var webappbuild='102 [9-5-2015]';
 
 
 $('#info_page').on('pageinit', function(event) {
